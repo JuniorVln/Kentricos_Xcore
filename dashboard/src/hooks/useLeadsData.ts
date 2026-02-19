@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { api } from '../lib/firebase';
+
 import { processLeads, type ScoredAssessment } from '../lib/scorer';
 
 // Simple in-memory cache to avoid refetching on tab switch

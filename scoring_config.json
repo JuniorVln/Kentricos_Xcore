@@ -1,0 +1,45 @@
+{
+    "cargos_alto_potencial": {
+        "hot": [
+            "CEO",
+            "CTO",
+            "CFO",
+            "COO",
+            "Diretor",
+            "VP",
+            "Sócio",
+            "Fundador"
+        ],
+        "warm": [
+            "Gerente",
+            "Coordenador",
+            "Supervisor",
+            "Head"
+        ],
+        "cold": []
+    },
+    "faixas_pontuacao": {
+        "hot": {
+            "min": 70,
+            "max": 100
+        },
+        "warm": {
+            "min": 40,
+            "max": 69
+        },
+        "cold": {
+            "min": 0,
+            "max": 39
+        }
+    },
+    "cores": {
+        "hot": "#F59E0B",
+        "warm": "#3B82F6",
+        "cold": "#6B7280"
+    },
+    "regra_combinada": {
+        "descricao": "Score final = peso_cargo (40%) + peso_pontuacao (60%)",
+        "peso_cargo": 0.4,
+        "peso_pontuacao": 0.6
+    }
+}

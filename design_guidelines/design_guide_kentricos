@@ -1,0 +1,139 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "Ubuntu",
+      "role": "body"
+    }
+  ],
+  "colors": {
+    "primary": "#76E2F4",
+    "accent": "#184E77",
+    "background": "#EDEDED",
+    "textPrimary": "#0A0A0A",
+    "link": "#0E334F"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Ubuntu",
+      "heading": "Ubuntu"
+    },
+    "fontStacks": {
+      "heading": [
+        "Ubuntu",
+        "sans-serif"
+      ],
+      "body": [
+        "Ubuntu",
+        "sans-serif"
+      ],
+      "paragraph": [
+        "Ubuntu",
+        "sans-serif"
+      ]
+    },
+    "fontSizes": {
+      "h1": "54px",
+      "h2": "24px",
+      "body": "20px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "0px"
+  },
+  "components": {
+    "input": {
+      "background": "transparent",
+      "textColor": "#0A0A0A",
+      "borderColor": null,
+      "borderRadius": "0px",
+      "borderRadiusCorners": {
+        "topLeft": "0px",
+        "topRight": "0px",
+        "bottomRight": "0px",
+        "bottomLeft": "0px"
+      },
+      "shadow": "none"
+    },
+    "buttonPrimary": {
+      "background": "#76E2F4",
+      "textColor": "#0A0A0A",
+      "borderRadius": "100px",
+      "borderRadiusCorners": {
+        "topLeft": "100px",
+        "topRight": "100px",
+        "bottomRight": "100px",
+        "bottomLeft": "100px"
+      },
+      "shadow": "none"
+    },
+    "buttonSecondary": {
+      "background": "#184E77",
+      "textColor": "#FFFFFF",
+      "borderRadius": "100px",
+      "borderRadiusCorners": {
+        "topLeft": "100px",
+        "topRight": "100px",
+        "bottomRight": "100px",
+        "bottomLeft": "100px"
+      },
+      "shadow": "none"
+    }
+  },
+  "images": {
+    "logo": "https://xcore-assessment.web.app/images/logo.svg",
+    "favicon": "https://xcore-assessment.web.app/favicon.ico",
+    "ogImage": "URL to Image Representing Xcore Assessment",
+    "logoAlt": "Logo Kentricos"
+  },
+  "__llm_logo_reasoning": {
+    "selectedIndex": 0,
+    "reasoning": "Selected #0 because it is visible, located in the header, and matches the brand 'Kentricos' as inferred from the page title.",
+    "confidence": 0.9,
+    "source": "llm"
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": 1,
+      "text": "Iniciar Assessment",
+      "reasoning": "The button 'Iniciar Assessment' has a vibrant blue background (#76E2F4) and action-oriented text, making it the primary CTA."
+    },
+    "secondary": {
+      "index": 0,
+      "text": "Fazer parte da Comunidade",
+      "reasoning": "The button 'Fazer parte da Comunidade' has a different vibrant blue background (#184E77), making it suitable as a secondary CTA."
+    },
+    "confidence": 0.95
+  },
+  "personality": {
+    "tone": "professional",
+    "energy": "medium",
+    "targetAudience": "business professionals"
+  },
+  "designSystem": {
+    "framework": "custom",
+    "componentLibrary": ""
+  },
+  "confidence": {
+    "buttons": 0.95,
+    "colors": 0.9,
+    "overall": 0.925
+  },
+  "__llm_metadata": {
+    "logoSelection": {
+      "llmCalled": true,
+      "llmSucceeded": true,
+      "finalSource": "llm",
+      "rawLogoSelection": {
+        "selectedLogoIndex": 0,
+        "selectedLogoReasoning": "Selected #0 because it is visible, located in the header, and matches the brand 'Kentricos' as inferred from the page title.",
+        "confidence": 0.9
+      }
+    },
+    "buttonClassification": {
+      "llmCalled": true,
+      "llmSucceeded": true
+    }
+  }
+}

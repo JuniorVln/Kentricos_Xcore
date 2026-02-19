@@ -1,0 +1,101 @@
+[
+    {
+        "data": "16/12/2025",
+        "empresa": "Valemobi",
+        "email": "arthur.hansen@valemobi.com.br",
+        "celular": "19 98304-1306",
+        "receitaAnual": "10.000.001 a 100.000.000",
+        "setor": "Tecnologia",
+        "nivelMaturidadeSelecionado": "Conscientização",
+        "pontuacaoTotalFinal": 26,
+        "_flag": "COLD"
+    },
+    {
+        "data": "11/12/2025",
+        "empresa": "RNP",
+        "email": "murilo.santos@rnp.br",
+        "celular": "61 98307-2627",
+        "receitaAnual": "Acima de 100.000.000",
+        "setor": "Governo",
+        "nivelMaturidadeSelecionado": "Conscientização",
+        "pontuacaoTotalFinal": 20,
+        "_flag": "COLD"
+    },
+    {
+        "data": "10/12/2025",
+        "empresa": "alura",
+        "email": "ana.pestana@alura.com.br",
+        "celular": "11 96580-9031",
+        "receitaAnual": "Acima de 100.000.000",
+        "setor": "Educação",
+        "nivelMaturidadeSelecionado": "Organizacional",
+        "pontuacaoTotalFinal": 39,
+        "_flag": "WARM"
+    },
+    {
+        "data": "25/11/2025",
+        "empresa": "Construtora Tenda",
+        "email": "fdede@tenda.com",
+        "celular": "11 95887-4744",
+        "receitaAnual": "100.001 a 1.000.000",
+        "setor": "Construção",
+        "nivelMaturidadeSelecionado": "Conscientização",
+        "pontuacaoTotalFinal": 50,
+        "_flag": "WARM"
+    },
+    {
+        "data": "25/11/2025",
+        "empresa": "Vero",
+        "email": "avieira@verointernet.com.br",
+        "celular": "11 92085-5250",
+        "receitaAnual": "10.000.001 a 100.000.000",
+        "setor": "Telecomunicações",
+        "nivelMaturidadeSelecionado": "Estruturação",
+        "pontuacaoTotalFinal": 63,
+        "_flag": "HOT"
+    },
+    {
+        "data": "24/11/2025",
+        "empresa": "Doc9",
+        "email": "adriana.costa@doc9.com.br",
+        "celular": "1.000.001 a 10.000.000",
+        "receitaAnual": "1.000.001 a 10.000.000",
+        "setor": "Outros",
+        "nivelMaturidadeSelecionado": "Conscientização",
+        "pontuacaoTotalFinal": 28,
+        "_flag": "COLD"
+    },
+    {
+        "data": "24/11/2025",
+        "empresa": "MPD Engenharia",
+        "email": "",
+        "celular": "",
+        "receitaAnual": "",
+        "setor": "Construção",
+        "nivelMaturidadeSelecionado": "",
+        "pontuacaoTotalFinal": 30,
+        "_flag": "COLD"
+    },
+    {
+        "data": "24/11/2025",
+        "empresa": "Allcare",
+        "email": "",
+        "celular": "",
+        "receitaAnual": "",
+        "setor": "Saúde",
+        "nivelMaturidadeSelecionado": "",
+        "pontuacaoTotalFinal": 45,
+        "_flag": "WARM"
+    },
+    {
+        "data": "24/11/2025",
+        "empresa": "Allcare Gestora de Saúde",
+        "email": "",
+        "celular": "",
+        "receitaAnual": "",
+        "setor": "Saúde",
+        "nivelMaturidadeSelecionado": "",
+        "pontuacaoTotalFinal": 42,
+        "_flag": "WARM"
+    }
+]

@@ -1,0 +1,51 @@
+{
+    "regras_pontuacao": {
+        "cargos_alto_potencial": [
+            "CEO",
+            "CTO",
+            "CFO",
+            "CMO",
+            "COO",
+            "Presidente",
+            "Vice-Presidente",
+            "VP",
+            "Diretor",
+            "Diretora",
+            "Sócio",
+            "Fundador",
+            "Owner"
+        ],
+        "cargos_medio_potencial": [
+            "Gerente",
+            "Head",
+            "Líder",
+            "Coordenador",
+            "Supervisor"
+        ],
+        "receita_alta_prioridade": [
+            "Acima de R$ 300 milhões",
+            "R$ 100 milhões a R$ 300 milhões",
+            "R$ 10 milhões a R$ 100 milhões"
+        ],
+        "maturidade_alvo": [
+            "Iniciante",
+            "Básico"
+        ]
+    },
+    "pontos": {
+        "cargo_alto": 40,
+        "cargo_medio": 20,
+        "receita_alta": 30,
+        "maturidade_alvo": 30,
+        "base": 0
+    },
+    "flags": {
+        "HOT": 70,
+        "WARM": 40
+    },
+    "metadata": {
+        "version": "1.0",
+        "updated_at": "2026-02-19",
+        "description": "Regras de scoring para XCore Assessment Dashboard"
+    }
+}

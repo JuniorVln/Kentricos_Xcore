@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XCore Dashboard</title>
+  <script>
+    window.onerror = function(msg, src, line, col, err) {
+      document.body.innerHTML = '<div style="padding:40px;font-family:monospace;background:#fff">'
+        + '<h2 style="color:red">Erro JavaScript detectado:</h2>'
+        + '<pre style="background:#f5f5f5;padding:20px;border-radius:8px;overflow:auto">'
+        + msg + '\n\nArquivo: ' + src + ':' + line + '\n\n' + (err ? err.stack : '')
+        + '</pre></div>';
+    };
+    window.addEventListener('unhandledrejection', function(e) {
+      document.body.innerHTML = '<div style="padding:40px;font-family:monospace;background:#fff">'
+        + '<h2 style="color:orange">Promise rejeitada:</h2>'
+        + '<pre style="background:#f5f5f5;padding:20px;border-radius:8px;overflow:auto">'
+        + (e.reason ? (e.reason.stack || e.reason) : 'Erro desconhecido')
+        + '</pre></div>';
+    });
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

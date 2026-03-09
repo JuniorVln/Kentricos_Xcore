@@ -17,6 +17,14 @@ import { ActiveFilters } from '../components/ActiveFilters';
 
 const columnHelper = createColumnHelper<ScoredAssessment>();
 
+function getMaturityFromScore(score: number): string {
+    if (score <= 30) return 'Inicial';
+    if (score <= 60) return 'Conscientização';
+    if (score <= 80) return 'Organizacional';
+    if (score <= 90) return 'Estruturação';
+    return 'Proatividade';
+}
+
 export const Listagem: React.FC = () => {
     const { data, loading, error } = useLeadsData();
     const [sorting, setSorting] = useState<SortingState>([]);
@@ -209,15 +217,6 @@ export const Listagem: React.FC = () => {
                     </div>
                 );
             },
-        }),
-        columnHelper.display({
-            id: 'actions',
-            header: '',
-            cell: () => (
-                <button className="p-2 text-gray-400 hover:text-brand-blue hover:bg-brand-blue/10 rounded-full transition-all">
-                    <Eye size={18} />
-                </button>
-            ),
         })
     ], []);
 
@@ -389,7 +388,7 @@ export const Listagem: React.FC = () => {
                                             </div>
                                             <div className="flex justify-between text-sm">
                                                 <span className="text-gray-400">Celular:</span>
-                                                <span className="text-gray-600 font-medium">{lead.whatsapp || '-'}</span>
+                                                <span className="text-gray-600 font-medium">{lead.celular || '-'}</span>
                                             </div>
                                             <div className="flex justify-between text-sm">
                                                 <span className="text-gray-400">Receita Anual:</span>
@@ -402,9 +401,11 @@ export const Listagem: React.FC = () => {
                                         </div>
 
                                         <div className="mt-6 pt-4 border-t border-gray-100/50">
-                                            <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-2">Nível de Maturidade Selecionado:</p>
+                                            <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-2">Nível de Maturidade Selecionado / Calculado:</p>
                                             <p className="text-xs text-gray-700 leading-relaxed italic">
                                                 "{lead.nivelMaturidadeSelecionado || 'Não informado'}"
+                                                <span className="mx-2 text-gray-300">|</span>
+                                                <strong className="text-brand-blue">{getMaturityFromScore(lead._score || 0)}</strong>
                                             </p>
                                         </div>
                                     </div>
@@ -416,9 +417,6 @@ export const Listagem: React.FC = () => {
                                                 <span className="text-xl font-bold text-brand-dark font-mono">{lead._score || 0}</span>
                                             </div>
                                         </div>
-                                        <button className="p-3 bg-brand-blue/10 text-brand-blue rounded-2xl hover:bg-brand-blue hover:text-white transition-all shadow-sm">
-                                            <Eye size={20} />
-                                        </button>
                                     </div>
                                 </div>
                             );

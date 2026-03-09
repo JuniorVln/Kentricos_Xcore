@@ -7,8 +7,10 @@ export function useMetrics(startDate?: Date | null, endDate?: Date | null) {
     const metrics = useMemo(() => {
         if (!data.length) return null;
 
-        // Filter by Date
+        // Filter by Date and Completion
         const filteredData = data.filter(d => {
+            if (d.pontuacaoTotalFinal === undefined) return false;
+
             if (!d.data) return true; // Keep if no date?? Or exclude? Assuming keep.
             // Parse date dd/mm/yyyy
             try {
@@ -38,7 +40,17 @@ export function useMetrics(startDate?: Date | null, endDate?: Date | null) {
             const k = d.nivelMaturidadeSelecionado || 'N/A';
             nivelMap[k] = (nivelMap[k] || 0) + 1;
         });
-        const nivelChart = Object.entries(nivelMap).map(([name, value]) => ({ name, value }));
+
+        const nivelOrder = ['Inicial', 'Conscientização', 'Organizacional', 'Estruturação', 'Proatividade'];
+        const nivelChart = Object.entries(nivelMap).map(([name, value]) => ({ name, value }))
+            .sort((a, b) => {
+                const indexA = nivelOrder.indexOf(a.name);
+                const indexB = nivelOrder.indexOf(b.name);
+                if (indexA === -1 && indexB === -1) return a.name.localeCompare(b.name);
+                if (indexA === -1) return 1;
+                if (indexB === -1) return -1;
+                return indexA - indexB;
+            });
 
         // Distribuição de Setor
         const setorMap: Record<string, number> = {};

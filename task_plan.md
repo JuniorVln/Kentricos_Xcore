@@ -14,13 +14,17 @@
 - [x] **Módulo 2 (Listagem):**
   - Tabela TanStack (Sort/Pagination)
   - Colunas Customizadas com Badges (HOT/WARM/COLD)
+  - Filtros Avançados com Persistência
+  - Visualização em Cards (Grid)
+  - Exportação CSV
 - [x] **Módulo 3 (Scoring):**
   - Engine em TypeScript (`scorer.ts`)
   - ConfigJson (`scoring_config.json`) movido para `src/config`
 - [x] **Integração:** `App.tsx` com Roteamento por Abas
 
-## 🔴 Phase 4 — Stylize (Próximo)
-- [ ] Refinar paleta de cores (Azul Institucional validado?)
+## 🔴 Phase 4 — Stylize (Em Progresso)
+- [x] Refinar paleta de cores (Azul Institucional validado)
+- [x] Melhorar responsividade desktop
 - [ ] Melhorar responsividade mobile (Sidebar colapsável?)
 - [ ] Feedback visual de loading (Skeletons)
 - [ ] Tratamento de erros de permissão mais amigável

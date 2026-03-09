@@ -56,5 +56,18 @@ export function calculateScore(lead: Assessment): ScoredAssessment {
 }
 
 export function processLeads(leads: Assessment[]): ScoredAssessment[] {
-    return leads.map(calculateScore).sort((a, b) => b._score - a._score);
+    return leads
+        .map(calculateScore)
+        .sort((a, b) => {
+            // Parse dates in dd/mm/yyyy format
+            const parseDate = (dateStr?: string) => {
+                if (!dateStr) return 0;
+                const parts = dateStr.split('/');
+                if (parts.length === 3) {
+                    return new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0])).getTime();
+                }
+                return 0;
+            };
+            return parseDate(b.data) - parseDate(a.data);
+        });
 }

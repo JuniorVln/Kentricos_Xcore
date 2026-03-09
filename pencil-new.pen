@@ -1,0 +1,38 @@
+{
+  "version": "2.8",
+  "children": [],
+  "variables": {
+    "accent": {
+      "type": "color",
+      "value": "#E8602B"
+    },
+    "bg": {
+      "type": "color",
+      "value": "#F5EDE0"
+    },
+    "highlight": {
+      "type": "color",
+      "value": "#F5C842"
+    },
+    "primary": {
+      "type": "color",
+      "value": "#1B2A6B"
+    },
+    "primary-dark": {
+      "type": "color",
+      "value": "#111D4A"
+    },
+    "secondary": {
+      "type": "color",
+      "value": "#2CC6D8"
+    },
+    "text-blue": {
+      "type": "color",
+      "value": "#1A3F9C"
+    },
+    "white": {
+      "type": "color",
+      "value": "#FFFFFF"
+    }
+  }
+}

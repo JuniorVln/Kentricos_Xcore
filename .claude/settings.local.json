@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx skills find ads advertising marketing)",
+      "Bash(npx skills find graphic design branding motion)",
+      "Bash(npx skills add coreyhaines31/marketingskills@ad-creative -g -y)",
+      "Bash(npx skills add agricidaniel/claude-ads@ads-tiktok -g -y)",
+      "Bash(npx skills add openclaudia/openclaudia-skills@video-ad-analysis -g -y)",
+      "Bash(npx skills add agricidaniel/claude-ads@ads -g -y)",
+      "Bash(npx skills add alexwelcing/copy@paid-ads -g -y)",
+      "Bash(npx skills add willem4130/claude-code-skills@elite-powerpoint-designer -g -y)",
+      "Bash(npx skills add dylantarre/animation-principles@brand-marketing -g -y)",
+      "Bash(npx skills add blitzreels/agent-skills@blitzreels-motion-graphics -g -y)"
+    ]
+  }
+}

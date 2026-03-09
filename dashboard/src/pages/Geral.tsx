@@ -1,19 +1,20 @@
 import React from 'react';
 import { useMetrics } from '../hooks/useMetrics';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, ScatterChart, Scatter, ZAxis } from 'recharts';
-import { Calendar } from 'lucide-react';
+import { Calendar, Users, TrendingUp, Info } from 'lucide-react';
 import { DatePicker } from '../components/DatePicker';
 
 const COLORS = ['#76E2F4', '#184E77', '#0E334F', '#00A8E8', '#007EA7', '#003459'];
 
 export const Geral: React.FC = () => {
-    const { loading, error, metrics } = useMetrics();
     const [activeCategory, setActiveCategory] = React.useState<string | null>(null);
     const [showDatePicker, setShowDatePicker] = React.useState(false);
     const [dateRange, setDateRange] = React.useState<{ from: Date | undefined, to: Date | undefined }>({
         from: undefined,
         to: undefined
     });
+
+    const { loading, error, metrics } = useMetrics(dateRange.from, dateRange.to);
 
     if (loading) return (
         <div className="space-y-8 animate-pulse">
@@ -44,25 +45,32 @@ export const Geral: React.FC = () => {
                 </div>
 
                 {/* Top Stats - Pill Style */}
-                <div className="flex flex-wrap gap-4 items-center bg-white/30 p-2 rounded-full border border-white/40 backdrop-blur-md">
-                    <div className="px-8 py-2 bg-brand-dark text-white rounded-full shadow-lg flex items-center gap-3">
-                        <span className="text-sm opacity-70">Total:</span>
-                        <span className="text-xl font-bold">{metrics.total}</span>
-                    </div>
-                    <div className="px-8 py-2 bg-[#FCD34D] text-brand-dark rounded-full shadow-lg flex items-center gap-3">
-                        <span className="text-sm font-medium opacity-80">Média Score:</span>
-                        <span className="text-xl font-bold">{Math.round(metrics.avgScore)}</span>
-                    </div>
-                    <div className="px-4 py-1 flex items-center gap-6">
-                        <div className="h-6 w-[1px] bg-gray-300"></div>
-                        <div className="flex items-center gap-2">
-                            <span className="text-xs text-gray-500 uppercase tracking-widest font-semibold">Leads Quentes</span>
-                            <span className="text-xl font-light text-brand-dark">{metrics.quality.hot}</span>
+                <div className="flex flex-wrap gap-4 items-center">
+                    <div className="bg-white/60 backdrop-blur-md border border-white/50 px-6 py-3 rounded-2xl shadow-xl flex items-center gap-4 group hover:bg-white transition-all cursor-default">
+                        <div className="p-2 bg-brand-blue/10 text-brand-blue rounded-xl group-hover:scale-110 transition-transform">
+                            <Users size={18} />
                         </div>
-                        <div className="h-6 w-[1px] bg-gray-300"></div>
-                        <div className="flex items-center gap-2">
-                            <span className="text-xs text-gray-500 uppercase tracking-widest font-semibold">Faltando Dados</span>
-                            <span className="text-xl font-light text-brand-dark">{metrics.quality.cold}</span>
+                        <div>
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Total Concluídos</span>
+                                <div className="group/info relative">
+                                    <Info size={10} className="text-gray-400" />
+                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-brand-dark text-white text-[9px] rounded-lg opacity-0 group-hover/info:opacity-100 transition-opacity pointer-events-none shadow-2xl z-50">
+                                        Considera apenas diagnósticos com pontuação final calculada (completos).
+                                    </div>
+                                </div>
+                            </div>
+                            <p className="text-xl font-bold text-brand-dark leading-none mt-0.5">{metrics.total}</p>
+                        </div>
+                    </div>
+
+                    <div className="bg-white/60 backdrop-blur-md border border-white/50 px-6 py-3 rounded-2xl shadow-xl flex items-center gap-4 group hover:bg-white transition-all cursor-default">
+                        <div className="p-2 bg-[#FCD34D]/10 text-brand-dark rounded-xl group-hover:scale-110 transition-transform">
+                            <TrendingUp size={18} />
+                        </div>
+                        <div>
+                            <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Score Médio</span>
+                            <p className="text-xl font-bold text-brand-dark leading-none mt-0.5">{Math.round(metrics.avgScore)}</p>
                         </div>
                     </div>
                 </div>
@@ -72,7 +80,7 @@ export const Geral: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-auto lg:h-[380px]">
 
                 {/* Card 1: Highlight / Profile Style (Left - 3 cols) */}
-                <div className="lg:col-span-3 bg-gradient-to-b from-white/60 to-white/30 backdrop-blur-xl border border-white/50 rounded-3xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden group">
+                <div className="lg:col-span-3 bg-gradient-to-b from-white/60 to-white/30 backdrop-blur-xl border border-white/50 rounded-3xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden group h-full">
                     <div className="absolute inset-0 bg-gradient-to-br from-brand-cyan/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                     <div className="relative z-10">
@@ -84,24 +92,52 @@ export const Geral: React.FC = () => {
                     </div>
 
                     <div className="bg-white/50 rounded-2xl p-4 mt-6 backdrop-blur-sm border border-white/40">
-                        <div className="flex justify-between items-center mb-2">
-                            <span className="text-xs text-gray-500">Conversão Estimada</span>
+                        <div className="flex justify-between items-center mb-1">
+                            <span className="text-xs text-gray-500 cursor-help" title="Cálculo baseado no volume de leads 'Hot' e 'Warm' em relação ao total">Conversão Estimada</span>
                             <span className="text-xs font-bold text-green-600">+12%</span>
                         </div>
+                        <p className="text-[10px] text-gray-400 mb-3 leading-tight">Projeção considerando o potencial de fechamento dos leads qualificados.</p>
                         <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                             <div className="h-full bg-brand-cyan w-[65%] rounded-full"></div>
                         </div>
                     </div>
                 </div>
 
-                {/* Card 2: Progress / Maturity Chart (Center - 4 cols) */}
-                <div className="lg:col-span-5 bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-6 shadow-xl flex flex-col relative">
+                {/* Card 2: Qualification Logic (New) */}
+                <div className="lg:col-span-3 bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-6 shadow-xl flex flex-col justify-between group h-full">
+                    <div>
+                        <h3 className="text-xl font-bold text-brand-dark mb-4">Lógica de Qualificação</h3>
+                        <div className="space-y-3">
+                            {[
+                                { label: 'Hot (Quente)', range: '70-100 pts', color: 'bg-amber-400', text: 'Alta prontidão tecnológica e executiva.' },
+                                { label: 'Warm (Morno)', range: '40-69 pts', color: 'bg-blue-400', text: 'Engajado, necessita de refinamento.' },
+                                { label: 'Cold (Frio)', range: '0-39 pts', color: 'bg-gray-400', text: 'Baixo perfil de maturidade atual.' }
+                            ].map((item, j) => (
+                                <div key={j} className="flex gap-3 items-start">
+                                    <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${item.color}`} />
+                                    <div>
+                                        <div className="flex justify-between items-center w-full">
+                                            <span className="text-[11px] font-bold text-brand-dark">{item.label}</span>
+                                            <span className="text-[10px] text-gray-400">{item.range}</span>
+                                        </div>
+                                        <p className="text-[10px] text-gray-500 font-light mt-0.5 leading-tight">{item.text}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Card 3: Maturity Chart */}
+                <div className="lg:col-span-3 bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-6 shadow-xl flex flex-col relative h-full">
                     <div className="flex justify-between items-center mb-6">
                         <div>
                             <h3 className="text-xl font-bold text-brand-dark">Nível de Maturidade</h3>
                             <div className="flex items-baseline gap-2">
-                                <span className="text-3xl font-light mt-1">4.2</span>
-                                <span className="text-xs text-gray-500">Média Geral</span>
+                                <span className="text-3xl font-light mt-1">
+                                    {(metrics.avgScore / 20).toFixed(1)}
+                                </span>
+                                <span className="text-xs text-gray-500">Média Geral (1-5)</span>
                             </div>
                         </div>
                         <button className="bg-[#FCD34D] text-brand-dark text-xs font-bold px-3 py-1 rounded-full shadow-sm">
@@ -128,8 +164,8 @@ export const Geral: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Card 3: Time Tracker / Score Radial (Right - 4 cols) */}
-                <div className="lg:col-span-4 bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-6 shadow-xl flex flex-col">
+                {/* Card 4: Score Radial */}
+                <div className="lg:col-span-3 bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-6 shadow-xl flex flex-col h-full">
                     <div className="flex justify-between items-start mb-4">
                         <h3 className="text-lg font-bold text-brand-dark">Pontuação</h3>
                         <div className="relative">
@@ -221,13 +257,20 @@ export const Geral: React.FC = () => {
                 <div className="lg:col-span-2 bg-[#1E293B] text-white rounded-3xl p-6 shadow-2xl relative overflow-hidden h-[400px]">
                     <div className="flex justify-between items-center mb-6 relative z-10">
                         <div>
-                            <h3 className="text-lg font-bold">Expectativa vs. Realidade</h3>
-                            <p className="text-xs text-gray-400 mt-1">
-                                {activeCategory ? `Filtrado por: ${activeCategory}` : 'Análise de coerência entre autodeclaração e score real.'}
+                            <div className="flex items-center gap-2 mb-1">
+                                <h3 className="text-lg font-bold">Expectativa vs. Realidade</h3>
+                                <div className="group relative cursor-help">
+                                    <Info size={14} className="text-gray-400 hover:text-brand-cyan transition-colors" />
+                                    <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-brand-dark text-white text-[10px] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity shadow-2xl z-20 pointer-events-none border border-white/10">
+                                        <p className="font-bold mb-1 underline decoration-brand-cyan">O que isso mede?</p>
+                                        A diferença entre a percepção do cliente (X) e a pontuação real do diagnóstico (Y).
+                                        Pontos fora da diagonal indicam lacunas de autoconhecimento ou excesso de otimismo.
+                                    </div>
+                                </div>
+                            </div>
+                            <p className="text-xs text-gray-400">
+                                {activeCategory ? `Filtrado por: ${activeCategory}` : 'Cruzamento de autodeclaração e score real.'}
                             </p>
-                        </div>
-                        <div className="flex gap-2">
-                            <span className="px-3 py-1 rounded-full bg-white/10 text-xs border border-white/10">30 dias</span>
                         </div>
                     </div>
 
@@ -259,8 +302,31 @@ export const Geral: React.FC = () => {
                                 <ZAxis dataKey="revenue" range={[60, 400]} name="Receita" />
                                 <Tooltip
                                     cursor={{ strokeDasharray: '3 3', stroke: '#555' }}
-                                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.5)', backgroundColor: '#1E293B', color: '#fff' }}
-                                    itemStyle={{ color: '#fff' }}
+                                    content={({ active, payload }) => {
+                                        if (active && payload && payload.length) {
+                                            const data = payload[0].payload;
+                                            return (
+                                                <div className="bg-[#1E293B] border border-white/10 p-4 rounded-xl shadow-2xl backdrop-blur-xl min-w-[200px]">
+                                                    <p className="text-brand-cyan text-sm font-bold border-b border-white/10 pb-2 mb-2">{data.name}</p>
+                                                    <div className="space-y-1">
+                                                        <div className="flex justify-between text-[11px]">
+                                                            <span className="text-gray-400">Score Real:</span>
+                                                            <span className="font-bold text-white">{data.score} pts</span>
+                                                        </div>
+                                                        <div className="flex justify-between text-[11px]">
+                                                            <span className="text-gray-400">Nível Declarado:</span>
+                                                            <span className="font-bold text-white">{data.autoLevel}</span>
+                                                        </div>
+                                                        <div className="flex justify-between text-[11px]">
+                                                            <span className="text-gray-400">Receita:</span>
+                                                            <span className="font-bold text-white truncate max-w-[80px]">{data.revenue}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    }}
                                 />
                                 <Scatter name="Empresas" data={metrics.expectationChart} fill="#76E2F4" shape="circle" />
                             </ScatterChart>

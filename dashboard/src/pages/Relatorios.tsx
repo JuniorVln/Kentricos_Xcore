@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useMetrics } from '../hooks/useMetrics';
+
 import { useLeadsData } from '../hooks/useLeadsData';
 import { FileText, Download, PieChart, Layers, Filter } from 'lucide-react';
 import { LeadsFilterBar, type FilterState } from '../components/LeadsFilterBar';
@@ -85,7 +85,7 @@ export const Relatorios: React.FC = () => {
         window.URL.revokeObjectURL(url);
     };
 
-    if (loading || !metrics) return (
+    if (loading) return (
         <div className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-8 shadow-xl animate-pulse min-h-[400px]">
             <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

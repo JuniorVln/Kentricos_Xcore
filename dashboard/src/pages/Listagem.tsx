@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-table';
 import type { SortingState } from '@tanstack/react-table';
 import type { ScoredAssessment } from '../lib/scorer';
-import { ArrowUpDown, Eye, Download, LayoutGrid, List } from 'lucide-react';
+import { ArrowUpDown, Download, LayoutGrid, List } from 'lucide-react';
 import { LeadsFilterBar, type FilterState } from '../components/LeadsFilterBar';
 import { ActiveFilters } from '../components/ActiveFilters';
 

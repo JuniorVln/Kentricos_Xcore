@@ -57,10 +57,19 @@ export const Relatorios: React.FC = () => {
 
         const COLORS = ['#184E77', '#1E6091', '#1A759F', '#168AAD', '#34A0A4', '#52B69A', '#76C893', '#99D98C', '#B5E48C', '#D9ED92'];
 
+        const nivelOrder = ['Inicial', 'Conscientização', 'Organizacional', 'Estruturação', 'Proatividade'];
+
         return {
             setor: Object.entries(setorMap).map(([name, value], i) => ({ name, value, color: COLORS[i % COLORS.length] })),
             receita: Object.entries(receitaMap).map(([name, value], i) => ({ name, value, color: COLORS[i % COLORS.length] })),
-            nivel: Object.entries(nivelMap).map(([name, value], i) => ({ name, value, color: COLORS[i % COLORS.length] })),
+            nivel: Object.entries(nivelMap).sort((a, b) => {
+                const indexA = nivelOrder.indexOf(a[0]);
+                const indexB = nivelOrder.indexOf(b[0]);
+                if (indexA === -1 && indexB === -1) return a[0].localeCompare(b[0]);
+                if (indexA === -1) return 1;
+                if (indexB === -1) return -1;
+                return indexA - indexB;
+            }).map(([name, value], i) => ({ name, value, color: COLORS[i % COLORS.length] })),
             total: filteredLeads.length
         };
     }, [filteredLeads]);
@@ -86,7 +95,7 @@ export const Relatorios: React.FC = () => {
     };
 
     if (loading) return (
-        <div className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-8 shadow-xl animate-pulse min-h-[400px]">
+        <div className="bg-white/60 dark:bg-[#1E293B]/60 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl p-8 shadow-xl animate-pulse min-h-[400px]">
             <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="h-64 bg-gray-200/50 rounded-2xl"></div>
@@ -99,10 +108,10 @@ export const Relatorios: React.FC = () => {
         <div className="space-y-8">
             <div className="flex flex-col md:flex-row justify-between items-end gap-6">
                 <div>
-                    <h2 className="text-3xl font-light text-brand-dark mb-1">
+                    <h2 className="text-3xl font-light text-brand-dark dark:text-white mb-1">
                         Relatórios Analíticos
                     </h2>
-                    <p className="text-gray-500 font-light">
+                    <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500 font-light">
                         Visualize e exporte dados agregados da sua base.
                     </p>
                 </div>
@@ -134,7 +143,7 @@ export const Relatorios: React.FC = () => {
             />
 
             {!reportMetrics ? (
-                <div className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-12 text-center text-gray-400">
+                <div className="bg-white/60 dark:bg-[#1E293B]/60 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl p-12 text-center text-gray-400 dark:text-gray-500">
                     Nenhum lead encontrado para os filtros selecionados.
                 </div>
             ) : (
@@ -145,12 +154,12 @@ export const Relatorios: React.FC = () => {
                         { title: 'Por Receita', data: reportMetrics.receita, icon: <Layers size={20} /> },
                         { title: 'Por Maturidade', data: reportMetrics.nivel, icon: <Filter size={20} /> }
                     ].map((chart, i) => (
-                        <div key={i} className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-6 shadow-lg flex flex-col h-[400px]">
+                        <div key={i} className="bg-white/60 dark:bg-[#1E293B]/60 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl p-6 shadow-lg flex flex-col h-[400px]">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="p-2 bg-brand-blue/10 rounded-lg text-brand-blue">
                                     {chart.icon}
                                 </div>
-                                <h3 className="font-bold text-brand-dark">{chart.title}</h3>
+                                <h3 className="font-bold text-brand-dark dark:text-white">{chart.title}</h3>
                             </div>
                             <div className="flex-1 min-h-0">
                                 <ResponsiveContainer width="100%" height="100%">
@@ -177,9 +186,9 @@ export const Relatorios: React.FC = () => {
                                     <div key={idx} className="flex items-center justify-between text-[10px]">
                                         <div className="flex items-center gap-2 truncate">
                                             <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
-                                            <span className="text-gray-600 truncate">{item.name}</span>
+                                            <span className="text-gray-600 dark:text-gray-300 truncate">{item.name}</span>
                                         </div>
-                                        <span className="font-bold text-brand-dark">{item.value}</span>
+                                        <span className="font-bold text-brand-dark dark:text-white">{item.value}</span>
                                     </div>
                                 ))}
                             </div>
@@ -190,17 +199,17 @@ export const Relatorios: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Sector Report */}
-                <div className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-8 shadow-xl flex flex-col">
+                <div className="bg-white/60 dark:bg-[#1E293B]/60 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl p-8 shadow-xl flex flex-col">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <div className="p-3 bg-brand-cyan/10 rounded-xl text-brand-blue">
                                 <PieChart size={24} />
                             </div>
-                            <h3 className="text-xl font-semibold text-brand-dark">Distribuição por Setor</h3>
+                            <h3 className="text-xl font-semibold text-brand-dark dark:text-white">Distribuição por Setor</h3>
                         </div>
                         <button
                             onClick={() => reportMetrics && handleExport(reportMetrics.setor, 'relatorio_setores')}
-                            className="p-2 text-gray-400 hover:text-brand-blue hover:bg-brand-blue/10 rounded-xl transition-all"
+                            className="p-2 text-gray-400 dark:text-gray-500 hover:text-brand-blue hover:bg-brand-blue/10 rounded-xl transition-all"
                             title="Exportar CSV"
                         >
                             <Download size={20} />
@@ -209,7 +218,7 @@ export const Relatorios: React.FC = () => {
 
                     <div className="flex-1 overflow-hidden rounded-2xl border border-white/60">
                         <table className="w-full text-sm text-left">
-                            <thead className="bg-white/40 text-xs uppercase text-gray-500 font-semibold border-b border-white/50">
+                            <thead className="bg-white/40 text-xs uppercase text-gray-500 dark:text-gray-400 dark:text-gray-500 font-semibold border-b border-white/50 dark:border-white/10">
                                 <tr>
                                     <th className="px-6 py-3">Setor</th>
                                     <th className="px-6 py-3 text-right">Leads</th>
@@ -218,10 +227,10 @@ export const Relatorios: React.FC = () => {
                             </thead>
                             <tbody className="divide-y divide-gray-100/50 bg-white/30">
                                 {reportMetrics && reportMetrics.setor.map((item, idx) => (
-                                    <tr key={idx} className="hover:bg-white/50 transition-colors">
-                                        <td className="px-6 py-3 font-medium text-brand-dark">{item.name}</td>
-                                        <td className="px-6 py-3 text-right text-gray-600 font-bold">{item.value}</td>
-                                        <td className="px-6 py-3 text-right text-gray-500">
+                                    <tr key={idx} className="hover:bg-white/50 dark:bg-[#1E293B]/50 transition-colors">
+                                        <td className="px-6 py-3 font-medium text-brand-dark dark:text-white">{item.name}</td>
+                                        <td className="px-6 py-3 text-right text-gray-600 dark:text-gray-300 font-bold">{item.value}</td>
+                                        <td className="px-6 py-3 text-right text-gray-500 dark:text-gray-400 dark:text-gray-500">
                                             {reportMetrics && ((item.value / reportMetrics.total) * 100).toFixed(1)}%
                                         </td>
                                     </tr>
@@ -232,17 +241,17 @@ export const Relatorios: React.FC = () => {
                 </div>
 
                 {/* Maturity Report */}
-                <div className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-8 shadow-xl flex flex-col">
+                <div className="bg-white/60 dark:bg-[#1E293B]/60 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl p-8 shadow-xl flex flex-col">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <div className="p-3 bg-brand-blue/10 rounded-xl text-brand-blue">
                                 <Layers size={24} />
                             </div>
-                            <h3 className="text-xl font-semibold text-brand-dark">Níveis de Maturidade</h3>
+                            <h3 className="text-xl font-semibold text-brand-dark dark:text-white">Níveis de Maturidade</h3>
                         </div>
                         <button
                             onClick={() => reportMetrics && handleExport(reportMetrics.nivel, 'relatorio_maturidade')}
-                            className="p-2 text-gray-400 hover:text-brand-blue hover:bg-brand-blue/10 rounded-xl transition-all"
+                            className="p-2 text-gray-400 dark:text-gray-500 hover:text-brand-blue hover:bg-brand-blue/10 rounded-xl transition-all"
                             title="Exportar CSV"
                         >
                             <Download size={20} />
@@ -251,7 +260,7 @@ export const Relatorios: React.FC = () => {
 
                     <div className="flex-1 overflow-hidden rounded-2xl border border-white/60">
                         <table className="w-full text-sm text-left">
-                            <thead className="bg-white/40 text-xs uppercase text-gray-500 font-semibold border-b border-white/50">
+                            <thead className="bg-white/40 text-xs uppercase text-gray-500 dark:text-gray-400 dark:text-gray-500 font-semibold border-b border-white/50 dark:border-white/10">
                                 <tr>
                                     <th className="px-6 py-3">Nível</th>
                                     <th className="px-6 py-3 text-right">Leads</th>
@@ -260,10 +269,10 @@ export const Relatorios: React.FC = () => {
                             </thead>
                             <tbody className="divide-y divide-gray-100/50 bg-white/30">
                                 {reportMetrics && reportMetrics.nivel.map((item, idx) => (
-                                    <tr key={idx} className="hover:bg-white/50 transition-colors">
-                                        <td className="px-6 py-3 font-medium text-brand-dark">{item.name}</td>
-                                        <td className="px-6 py-3 text-right text-gray-600 font-bold">{item.value}</td>
-                                        <td className="px-6 py-3 text-right text-gray-500">
+                                    <tr key={idx} className="hover:bg-white/50 dark:bg-[#1E293B]/50 transition-colors">
+                                        <td className="px-6 py-3 font-medium text-brand-dark dark:text-white">{item.name}</td>
+                                        <td className="px-6 py-3 text-right text-gray-600 dark:text-gray-300 font-bold">{item.value}</td>
+                                        <td className="px-6 py-3 text-right text-gray-500 dark:text-gray-400 dark:text-gray-500">
                                             {reportMetrics && ((item.value / reportMetrics.total) * 100).toFixed(1)}%
                                         </td>
                                     </tr>
@@ -282,7 +291,10 @@ export const Relatorios: React.FC = () => {
                         Baixe um PDF consolidado com todos os insights, gráficos de performance e recomendações de IA para sua base de leads.
                     </p>
                 </div>
-                <button className="flex items-center gap-3 px-8 py-4 bg-white text-brand-dark rounded-xl font-bold hover:bg-brand-cyan hover:shadow-lg hover:scale-105 transition-all active:scale-95">
+                <button
+                    onClick={() => window.print()}
+                    className="flex items-center gap-3 px-8 py-4 bg-white dark:bg-[#1E293B] text-brand-dark dark:text-white rounded-xl font-bold hover:bg-brand-cyan hover:shadow-lg hover:scale-105 transition-all active:scale-95"
+                >
                     <FileText size={20} />
                     Gerar Relatório PDF
                 </button>

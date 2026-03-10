@@ -36,10 +36,19 @@ export const LeadsFilterBar: React.FC<LeadsFilterBarProps> = ({ data, filters, o
             if (lead.nivelMaturidadeSelecionado) maturities.add(lead.nivelMaturidadeSelecionado);
         });
 
+        const nivelOrder = ['Inicial', 'Conscientização', 'Organizacional', 'Estruturação', 'Proatividade'];
+
         return {
             sectors: Array.from(sectors).sort(),
             revenues: Array.from(revenues).sort(), // Need to improve revenue sorting later
-            maturities: Array.from(maturities).sort()
+            maturities: Array.from(maturities).sort((a, b) => {
+                const indexA = nivelOrder.indexOf(a);
+                const indexB = nivelOrder.indexOf(b);
+                if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+                if (indexA === -1) return 1;
+                if (indexB === -1) return -1;
+                return indexA - indexB;
+            })
         };
     }, [data]);
 
@@ -67,15 +76,15 @@ export const LeadsFilterBar: React.FC<LeadsFilterBarProps> = ({ data, filters, o
     };
 
     return (
-        <div className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-4 shadow-lg mb-6 sticky top-0 z-40">
+        <div className="bg-white/60 dark:bg-[#1E293B]/60 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl p-4 shadow-lg mb-6 sticky top-0 z-40">
             <div className="flex flex-wrap items-center gap-4">
                 {/* Search Integration */}
                 <div className="relative flex-1 min-w-[250px] group">
-                    <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-cyan transition-colors" />
+                    <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 group-focus-within:text-brand-cyan transition-colors" />
                     <input
                         type="text"
                         placeholder="Buscar empresas..."
-                        className="w-full pl-10 pr-4 py-2.5 bg-white/80 border border-white/50 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan/30 shadow-sm transition-all"
+                        className="w-full pl-10 pr-4 py-2.5 bg-white/80 dark:bg-[#1E293B]/80 border border-white/50 dark:border-white/10 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-cyan/30 shadow-sm transition-all"
                         value={filters.search}
                         onChange={e => onFiltersChange({ ...filters, search: e.target.value })}
                     />
@@ -85,20 +94,20 @@ export const LeadsFilterBar: React.FC<LeadsFilterBarProps> = ({ data, filters, o
                 <div className="relative">
                     <button
                         onClick={() => setOpenDropdown(openDropdown === 'status' ? null : 'status')}
-                        className={`flex items-center gap-2 px-4 py-2.5 bg-white/80 border border-white/50 rounded-2xl text-sm font-medium transition-all hover:bg-white ${filters.status.length > 0 ? 'ring-2 ring-brand-cyan/20 border-brand-cyan' : ''}`}
+                        className={`flex items-center gap-2 px-4 py-2.5 bg-white/80 dark:bg-[#1E293B]/80 border border-white/50 dark:border-white/10 rounded-2xl text-sm font-medium transition-all hover:bg-white dark:bg-[#1E293B]${filters.status.length > 0 ? 'ring-2 ring-brand-cyan/20 border-brand-cyan' : ''}`}
                     >
                         <span>Status</span>
-                        {filters.status.length > 0 && <span className="bg-brand-cyan/20 text-brand-dark px-2 rounded-full text-[10px]">{filters.status.length}</span>}
+                        {filters.status.length > 0 && <span className="bg-brand-cyan/20 text-brand-dark dark:text-white px-2 rounded-full text-[10px]">{filters.status.length}</span>}
                         <ChevronDown size={14} className={`transition-transform ${openDropdown === 'status' ? 'rotate-180' : ''}`} />
                     </button>
                     {openDropdown === 'status' && (
-                        <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 backdrop-blur-xl border border-white/50 rounded-2xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in duration-200">
+                        <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-2xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in duration-200">
                             <div className="space-y-1">
                                 {['HOT', 'WARM', 'COLD'].map(status => (
                                     <button
                                         key={status}
                                         onClick={() => toggleStatus(status)}
-                                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold transition-all ${filters.status.includes(status) ? 'bg-brand-cyan/10 text-brand-dark' : 'hover:bg-gray-50 text-gray-500'}`}
+                                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold transition-all ${filters.status.includes(status) ? 'bg-brand-cyan/10 text-brand-dark dark:text-white' : 'hover:bg-gray-50 text-gray-500 dark:text-gray-400 dark:text-gray-500'}`}
                                     >
                                         <div className="flex items-center gap-2">
                                             <div className={`w-2 h-2 rounded-full ${status === 'HOT' ? 'bg-amber-400' : status === 'WARM' ? 'bg-blue-400' : 'bg-gray-400'}`} />
@@ -116,19 +125,19 @@ export const LeadsFilterBar: React.FC<LeadsFilterBarProps> = ({ data, filters, o
                 <div className="relative">
                     <button
                         onClick={() => setOpenDropdown(openDropdown === 'sector' ? null : 'sector')}
-                        className={`flex items-center gap-2 px-4 py-2.5 bg-white/80 border border-white/50 rounded-2xl text-sm font-medium transition-all hover:bg-white ${filters.sector.length > 0 ? 'ring-2 ring-brand-cyan/20 border-brand-cyan' : ''}`}
+                        className={`flex items-center gap-2 px-4 py-2.5 bg-white/80 dark:bg-[#1E293B]/80 border border-white/50 dark:border-white/10 rounded-2xl text-sm font-medium transition-all hover:bg-white dark:bg-[#1E293B]${filters.sector.length > 0 ? 'ring-2 ring-brand-cyan/20 border-brand-cyan' : ''}`}
                     >
                         <span>Setor</span>
                         <ChevronDown size={14} className={`transition-transform ${openDropdown === 'sector' ? 'rotate-180' : ''}`} />
                     </button>
                     {openDropdown === 'sector' && (
-                        <div className="absolute top-full left-0 mt-2 w-64 bg-white/95 backdrop-blur-xl border border-white/50 rounded-2xl shadow-2xl p-3 z-50 max-h-80 overflow-y-auto custom-scrollbar animate-in fade-in zoom-in duration-200">
+                        <div className="absolute top-full left-0 mt-2 w-64 bg-white/95 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-2xl shadow-2xl p-3 z-50 max-h-80 overflow-y-auto custom-scrollbar animate-in fade-in zoom-in duration-200">
                             <div className="space-y-1">
                                 {uniqueValues.sectors.map(sector => (
                                     <button
                                         key={sector}
                                         onClick={() => toggleValue('sector', sector)}
-                                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all ${filters.sector.includes(sector) ? 'bg-brand-cyan/10 text-brand-dark font-bold' : 'hover:bg-gray-50 text-gray-600'}`}
+                                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all ${filters.sector.includes(sector) ? 'bg-brand-cyan/10 text-brand-dark dark:text-white font-bold' : 'hover:bg-gray-50 text-gray-600 dark:text-gray-300'}`}
                                     >
                                         <span className="truncate mr-2">{sector}</span>
                                         {filters.sector.includes(sector) && <X size={12} />}
@@ -143,19 +152,19 @@ export const LeadsFilterBar: React.FC<LeadsFilterBarProps> = ({ data, filters, o
                 <div className="relative">
                     <button
                         onClick={() => setOpenDropdown(openDropdown === 'revenue' ? null : 'revenue')}
-                        className={`flex items-center gap-2 px-4 py-2.5 bg-white/80 border border-white/50 rounded-2xl text-sm font-medium transition-all hover:bg-white ${filters.revenue.length > 0 ? 'ring-2 ring-brand-cyan/20 border-brand-cyan' : ''}`}
+                        className={`flex items-center gap-2 px-4 py-2.5 bg-white/80 dark:bg-[#1E293B]/80 border border-white/50 dark:border-white/10 rounded-2xl text-sm font-medium transition-all hover:bg-white dark:bg-[#1E293B]${filters.revenue.length > 0 ? 'ring-2 ring-brand-cyan/20 border-brand-cyan' : ''}`}
                     >
                         <span>Receita</span>
                         <ChevronDown size={14} className={`transition-transform ${openDropdown === 'revenue' ? 'rotate-180' : ''}`} />
                     </button>
                     {openDropdown === 'revenue' && (
-                        <div className="absolute top-full left-0 mt-2 w-64 bg-white/95 backdrop-blur-xl border border-white/50 rounded-2xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in duration-200">
+                        <div className="absolute top-full left-0 mt-2 w-64 bg-white/95 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-2xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in duration-200">
                             <div className="space-y-1">
                                 {uniqueValues.revenues.map(rev => (
                                     <button
                                         key={rev}
                                         onClick={() => toggleValue('revenue', rev)}
-                                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all ${filters.revenue.includes(rev) ? 'bg-brand-cyan/10 text-brand-dark font-bold' : 'hover:bg-gray-50 text-gray-600'}`}
+                                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all ${filters.revenue.includes(rev) ? 'bg-brand-cyan/10 text-brand-dark dark:text-white font-bold' : 'hover:bg-gray-50 text-gray-600 dark:text-gray-300'}`}
                                     >
                                         <span className="truncate mr-2">{rev}</span>
                                         {filters.revenue.includes(rev) && <X size={12} />}
@@ -170,19 +179,19 @@ export const LeadsFilterBar: React.FC<LeadsFilterBarProps> = ({ data, filters, o
                 <div className="relative">
                     <button
                         onClick={() => setOpenDropdown(openDropdown === 'maturity' ? null : 'maturity')}
-                        className={`flex items-center gap-2 px-4 py-2.5 bg-white/80 border border-white/50 rounded-2xl text-sm font-medium transition-all hover:bg-white ${filters.maturity.length > 0 ? 'ring-2 ring-brand-cyan/20 border-brand-cyan' : ''}`}
+                        className={`flex items-center gap-2 px-4 py-2.5 bg-white/80 dark:bg-[#1E293B]/80 border border-white/50 dark:border-white/10 rounded-2xl text-sm font-medium transition-all hover:bg-white dark:bg-[#1E293B]${filters.maturity.length > 0 ? 'ring-2 ring-brand-cyan/20 border-brand-cyan' : ''}`}
                     >
                         <span>Maturidade</span>
                         <ChevronDown size={14} className={`transition-transform ${openDropdown === 'maturity' ? 'rotate-180' : ''}`} />
                     </button>
                     {openDropdown === 'maturity' && (
-                        <div className="absolute top-full left-0 mt-2 w-64 bg-white/95 backdrop-blur-xl border border-white/50 rounded-2xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in duration-200">
+                        <div className="absolute top-full left-0 mt-2 w-64 bg-white/95 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-2xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in duration-200">
                             <div className="space-y-1">
                                 {uniqueValues.maturities.map(mat => (
                                     <button
                                         key={mat}
                                         onClick={() => toggleValue('maturity', mat)}
-                                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all ${filters.maturity.includes(mat) ? 'bg-brand-cyan/10 text-brand-dark font-bold' : 'hover:bg-gray-50 text-gray-600'}`}
+                                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all ${filters.maturity.includes(mat) ? 'bg-brand-cyan/10 text-brand-dark dark:text-white font-bold' : 'hover:bg-gray-50 text-gray-600 dark:text-gray-300'}`}
                                     >
                                         <span className="truncate mr-2">{mat}</span>
                                         {filters.maturity.includes(mat) && <X size={12} />}
@@ -195,8 +204,8 @@ export const LeadsFilterBar: React.FC<LeadsFilterBarProps> = ({ data, filters, o
 
                 {/* Score Range Filter */}
                 <div className="relative group">
-                    <div className="flex flex-col gap-1 px-4 py-1.5 bg-white/80 border border-white/50 rounded-2xl shadow-sm min-w-[180px]">
-                        <div className="flex justify-between items-center text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+                    <div className="flex flex-col gap-1 px-4 py-1.5 bg-white/80 dark:bg-[#1E293B]/80 border border-white/50 dark:border-white/10 rounded-2xl shadow-sm min-w-[180px]">
+                        <div className="flex justify-between items-center text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider">
                             <span>Score</span>
                             <span className="text-brand-blue">{filters.scoreRange[0]} - {filters.scoreRange[1]} pts</span>
                         </div>
@@ -227,9 +236,9 @@ export const LeadsFilterBar: React.FC<LeadsFilterBarProps> = ({ data, filters, o
                 <div className="relative">
                     <button
                         onClick={() => setShowDatePicker(!showDatePicker)}
-                        className={`flex items-center gap-2 px-4 py-2.5 bg-white/80 border border-white/50 rounded-2xl text-sm font-medium transition-all hover:bg-white ${filters.dateRange.from ? 'ring-2 ring-brand-cyan/20 border-brand-cyan' : ''}`}
+                        className={`flex items-center gap-2 px-4 py-2.5 bg-white/80 dark:bg-[#1E293B]/80 border border-white/50 dark:border-white/10 rounded-2xl text-sm font-medium transition-all hover:bg-white dark:bg-[#1E293B]${filters.dateRange.from ? 'ring-2 ring-brand-cyan/20 border-brand-cyan' : ''}`}
                     >
-                        <CalendarIcon size={16} className="text-gray-400" />
+                        <CalendarIcon size={16} className="text-gray-400 dark:text-gray-500" />
                         <span className="max-w-[120px] truncate">
                             {filters.dateRange.from ?
                                 `${format(filters.dateRange.from, 'dd/MM')} - ${filters.dateRange.to ? format(filters.dateRange.to, 'dd/MM') : '...'}`

@@ -11,7 +11,8 @@ import {
 } from '@tanstack/react-table';
 import type { SortingState } from '@tanstack/react-table';
 import type { ScoredAssessment } from '../lib/scorer';
-import { ArrowUpDown, Download, LayoutGrid, List } from 'lucide-react';
+import { ArrowUpDown, Download, Eye, LayoutGrid, List } from 'lucide-react';
+import { LeadDetailsModal } from '../components/LeadDetailsModal';
 import { LeadsFilterBar, type FilterState } from '../components/LeadsFilterBar';
 import { ActiveFilters } from '../components/ActiveFilters';
 
@@ -27,9 +28,10 @@ function getMaturityFromScore(score: number): string {
 
 export const Listagem: React.FC = () => {
     const { data, loading, error } = useLeadsData();
-    const [sorting, setSorting] = useState<SortingState>([]);
+    const [sorting, setSorting] = useState<SortingState>([{ id: 'data', desc: true }]);
     const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 12 });
     const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
+    const [selectedLead, setSelectedLead] = useState<ScoredAssessment | null>(null);
 
     const initialFilters: FilterState = {
         status: [],
@@ -160,6 +162,12 @@ export const Listagem: React.FC = () => {
     };
 
 
+    const parseDate = (d: string) => {
+        const parts = d?.split('/');
+        if (!parts || parts.length !== 3) return 0;
+        return new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0])).getTime();
+    };
+
     const columns = useMemo(() => [
         columnHelper.accessor('_flag', {
             id: '_flag',
@@ -170,7 +178,7 @@ export const Listagem: React.FC = () => {
                     // Match scoring_config.json colors: HOT=#F59E0B (Amber/Yellow), WARM=#3B82F6 (Blue), COLD=#6B7280 (Gray)
                     HOT: 'bg-amber-100 text-amber-700 border-amber-200',
                     WARM: 'bg-blue-100 text-blue-700 border-blue-200',
-                    COLD: 'bg-gray-100 text-gray-700 border-gray-200'
+                    COLD: 'bg-gray-100 text-gray-700 border-gray-200 dark:border-gray-700'
                 };
                 const style = styles[flag as keyof typeof styles] || styles.COLD;
                 return (
@@ -187,15 +195,15 @@ export const Listagem: React.FC = () => {
                     Empresa <ArrowUpDown size={14} className="opacity-50" />
                 </button>
             ),
-            cell: info => <span className="font-semibold text-brand-dark">{info.getValue() || '-'}</span>,
+            cell: info => <span className="font-semibold text-brand-dark dark:text-gray-100">{info.getValue() || '-'}</span>,
         }),
         columnHelper.accessor('email', {
             header: 'Email',
-            cell: info => <span className="text-gray-600">{info.getValue() || '-'}</span>,
+            cell: info => <span className="text-gray-600 dark:text-gray-300">{info.getValue() || '-'}</span>,
         }),
         columnHelper.accessor('receitaAnual', {
             header: 'Receita',
-            cell: info => <span className="text-gray-600 font-medium">{info.getValue() || '-'}</span>,
+            cell: info => <span className="text-gray-600 dark:text-gray-300 font-medium">{info.getValue() || '-'}</span>,
         }),
         columnHelper.accessor('_score', {
             header: ({ column }) => (
@@ -213,11 +221,36 @@ export const Listagem: React.FC = () => {
                                 style={{ width: `${Math.min(val || 0, 100)}%` }}
                             ></div>
                         </div>
-                        <span className="font-bold text-brand-dark">{val}</span>
+                        <span className="font-bold text-brand-dark dark:text-gray-100">{val}</span>
                     </div>
                 );
             },
-        })
+        }),
+        columnHelper.accessor('data', {
+            id: 'data',
+            header: ({ column }) => (
+                <button className="flex items-center gap-2 hover:text-brand-cyan transition-colors" onClick={column.getToggleSortingHandler()}>
+                    Data <ArrowUpDown size={14} className="opacity-50" />
+                </button>
+            ),
+            cell: info => <span className="text-gray-500 dark:text-gray-400 dark:text-gray-500 text-xs">{info.getValue() || '-'}</span>,
+            sortingFn: (rowA, rowB) => {
+                return parseDate(rowA.original.data || '') - parseDate(rowB.original.data || '');
+            },
+        }),
+        columnHelper.display({
+            id: 'actions',
+            header: '',
+            cell: ({ row }) => (
+                <button
+                    onClick={() => setSelectedLead(row.original)}
+                    className="p-2 rounded-xl text-gray-400 dark:text-gray-500 hover:text-brand-blue hover:bg-brand-blue/10 transition-all"
+                    title="Ver detalhes"
+                >
+                    <Eye size={16} />
+                </button>
+            ),
+        }),
     ], []);
 
     const table = useReactTable({
@@ -237,7 +270,7 @@ export const Listagem: React.FC = () => {
     });
 
     if (loading) return (
-        <div className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-8 shadow-xl animate-pulse">
+        <div className="bg-white/60 dark:bg-[#1E293B]/60 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl p-8 shadow-xl animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
             <div className="space-y-3">
                 {[...Array(5)].map((_, i) => (
@@ -255,21 +288,27 @@ export const Listagem: React.FC = () => {
 
     return (
         <div className="space-y-6">
+            {selectedLead && (
+                <LeadDetailsModal
+                    lead={selectedLead}
+                    onClose={() => setSelectedLead(null)}
+                />
+            )}
             <div className="flex flex-col gap-0 px-2 lg:px-0">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                    <h2 className="text-2xl font-bold text-brand-dark">Leads Qualificados</h2>
+                    <h2 className="text-2xl font-bold text-brand-dark dark:text-gray-100">Leads Qualificados</h2>
                     <div className="flex items-center gap-3 w-full md:w-auto">
-                        <div className="flex bg-white/60 backdrop-blur-md border border-white/50 rounded-xl p-1 shadow-sm">
+                        <div className="flex bg-white/60 dark:bg-[#1E293B]/60 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-xl p-1 shadow-sm">
                             <button
                                 onClick={() => setViewMode('table')}
-                                className={`p-2 rounded-lg transition-all ${viewMode === 'table' ? 'bg-brand-blue text-white shadow-md' : 'text-gray-400 hover:text-brand-blue hover:bg-white/50'}`}
+                                className={`p-2 rounded-lg transition-all ${viewMode === 'table' ? 'bg-brand-blue text-white shadow-md' : 'text-gray-400 dark:text-gray-500 hover:text-brand-blue hover:bg-white/50 dark:bg-black/20'}`}
                                 title="Visualização em Lista"
                             >
                                 <List size={18} />
                             </button>
                             <button
                                 onClick={() => setViewMode('grid')}
-                                className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-brand-blue text-white shadow-md' : 'text-gray-400 hover:text-brand-blue hover:bg-white/50'}`}
+                                className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-brand-blue text-white shadow-md' : 'text-gray-400 dark:text-gray-500 hover:text-brand-blue hover:bg-white/50 dark:bg-black/20'}`}
                                 title="Visualização em Cards"
                             >
                                 <LayoutGrid size={18} />
@@ -302,10 +341,10 @@ export const Listagem: React.FC = () => {
 
             {/* Content Visualization */}
             {viewMode === 'table' ? (
-                <div className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl shadow-xl overflow-hidden">
+                <div className="bg-white/60 dark:bg-[#1E293B]/60 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl shadow-xl overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
-                            <thead className="bg-white/40 text-xs uppercase text-gray-500 font-semibold tracking-wider border-b border-white/50">
+                            <thead className="bg-white/40 text-xs uppercase text-gray-500 dark:text-gray-400 dark:text-gray-500 font-semibold tracking-wider border-b border-white/50 dark:border-white/10">
                                 {table.getHeaderGroups().map(headerGroup => (
                                     <tr key={headerGroup.id}>
                                         {headerGroup.headers.map(header => (
@@ -318,7 +357,7 @@ export const Listagem: React.FC = () => {
                             </thead>
                             <tbody className="divide-y divide-gray-100/50">
                                 {table.getRowModel().rows.map(row => (
-                                    <tr key={row.id} className="hover:bg-white/50 transition-colors group">
+                                    <tr key={row.id} className="hover:bg-white/50 dark:bg-black/20 transition-colors group">
                                         {row.getVisibleCells().map(cell => (
                                             <td key={cell.id} className="px-6 py-4 first:pl-8 last:pr-8">
                                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -331,20 +370,20 @@ export const Listagem: React.FC = () => {
                     </div>
 
                     {/* Pagination */}
-                    <div className="px-8 py-4 border-t border-white/50 flex items-center justify-between bg-white/20">
-                        <span className="text-sm text-gray-500">
-                            Mostrando <span className="font-bold text-brand-dark">{table.getRowModel().rows.length}</span> de <span className="font-bold text-brand-dark">{table.getFilteredRowModel().rows.length}</span> resultados
+                    <div className="px-8 py-4 border-t border-white/50 dark:border-white/10 flex items-center justify-between bg-white/20">
+                        <span className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
+                            Mostrando <span className="font-bold text-brand-dark dark:text-gray-100">{table.getRowModel().rows.length}</span> de <span className="font-bold text-brand-dark dark:text-gray-100">{table.getFilteredRowModel().rows.length}</span> resultados
                         </span>
                         <div className="flex gap-2">
                             <button
-                                className="px-4 py-2 bg-white/50 border border-white/50 rounded-xl text-sm hover:bg-white disabled:opacity-50 transition-all shadow-sm"
+                                className="px-4 py-2 bg-white/50 dark:bg-black/20 border border-white/50 dark:border-white/10 rounded-xl text-sm hover:bg-white dark:bg-[#1E293B]disabled:opacity-50 transition-all shadow-sm"
                                 onClick={() => table.previousPage()}
                                 disabled={!table.getCanPreviousPage()}
                             >
                                 Anterior
                             </button>
                             <button
-                                className="px-4 py-2 bg-white/50 border border-white/50 rounded-xl text-sm hover:bg-white disabled:opacity-50 transition-all shadow-sm"
+                                className="px-4 py-2 bg-white/50 dark:bg-black/20 border border-white/50 dark:border-white/10 rounded-xl text-sm hover:bg-white dark:bg-[#1E293B]disabled:opacity-50 transition-all shadow-sm"
                                 onClick={() => table.nextPage()}
                                 disabled={!table.getCanNextPage()}
                             >
@@ -359,49 +398,49 @@ export const Listagem: React.FC = () => {
                         {table.getRowModel().rows.map(row => {
                             const lead = row.original;
                             return (
-                                <div key={row.id} className="bg-white/80 backdrop-blur-xl border border-white/50 rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all group relative overflow-hidden flex flex-col justify-between h-full">
+                                <div key={row.id} className="bg-white/80 dark:bg-[#1E293B]/80 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all group relative overflow-hidden flex flex-col justify-between h-full">
                                     <div className="absolute top-0 right-0 p-4">
                                         <div className={`px-3 py-1 rounded-full text-[10px] font-bold border ${lead._flag === 'HOT' ? 'bg-amber-100 text-amber-700 border-amber-200' :
                                             lead._flag === 'WARM' ? 'bg-blue-100 text-blue-700 border-blue-200' :
-                                                'bg-gray-100 text-gray-700 border-gray-200'
+                                                'bg-gray-100 text-gray-700 border-gray-200 dark:border-gray-700'
                                             }`}>
                                             {lead._flag}
                                         </div>
                                     </div>
 
                                     <div>
-                                        <h4 className="text-xl font-bold text-brand-dark group-hover:text-brand-blue transition-colors">
+                                        <h4 className="text-xl font-bold text-brand-dark dark:text-gray-100 group-hover:text-brand-blue transition-colors">
                                             {lead.nome || 'Nome não informado'}
                                         </h4>
                                         <div className="mt-4 space-y-2">
                                             <div className="flex justify-between text-sm">
-                                                <span className="text-gray-400">Data:</span>
-                                                <span className="text-gray-600 font-medium">{lead.data || '-'}</span>
+                                                <span className="text-gray-400 dark:text-gray-500">Data:</span>
+                                                <span className="text-gray-600 dark:text-gray-300 font-medium">{lead.data || '-'}</span>
                                             </div>
                                             <div className="flex justify-between text-sm">
-                                                <span className="text-gray-400">Empresa:</span>
-                                                <span className="text-gray-600 font-medium truncate ml-4">{lead.empresa || '-'}</span>
+                                                <span className="text-gray-400 dark:text-gray-500">Empresa:</span>
+                                                <span className="text-gray-600 dark:text-gray-300 font-medium truncate ml-4">{lead.empresa || '-'}</span>
                                             </div>
                                             <div className="flex justify-between text-sm">
-                                                <span className="text-gray-400">Email:</span>
-                                                <span className="text-gray-600 font-medium truncate ml-4 text-xs italic">{lead.email || '-'}</span>
+                                                <span className="text-gray-400 dark:text-gray-500">Email:</span>
+                                                <span className="text-gray-600 dark:text-gray-300 font-medium truncate ml-4 text-xs italic">{lead.email || '-'}</span>
                                             </div>
                                             <div className="flex justify-between text-sm">
-                                                <span className="text-gray-400">Celular:</span>
-                                                <span className="text-gray-600 font-medium">{lead.celular || '-'}</span>
+                                                <span className="text-gray-400 dark:text-gray-500">Celular:</span>
+                                                <span className="text-gray-600 dark:text-gray-300 font-medium">{lead.celular || '-'}</span>
                                             </div>
                                             <div className="flex justify-between text-sm">
-                                                <span className="text-gray-400">Receita Anual:</span>
-                                                <span className="text-gray-600 font-medium truncate ml-4">{lead.receitaAnual || '-'}</span>
+                                                <span className="text-gray-400 dark:text-gray-500">Receita Anual:</span>
+                                                <span className="text-gray-600 dark:text-gray-300 font-medium truncate ml-4">{lead.receitaAnual || '-'}</span>
                                             </div>
                                             <div className="flex justify-between text-sm">
-                                                <span className="text-gray-400">Setor:</span>
-                                                <span className="text-gray-600 font-medium">{lead.setor || '-'}</span>
+                                                <span className="text-gray-400 dark:text-gray-500">Setor:</span>
+                                                <span className="text-gray-600 dark:text-gray-300 font-medium">{lead.setor || '-'}</span>
                                             </div>
                                         </div>
 
-                                        <div className="mt-6 pt-4 border-t border-gray-100/50">
-                                            <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-2">Nível de Maturidade Selecionado / Calculado:</p>
+                                        <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700/50">
+                                            <p className="text-[10px] uppercase tracking-widest text-gray-400 dark:text-gray-500 font-bold mb-2">Nível de Maturidade Selecionado / Calculado:</p>
                                             <p className="text-xs text-gray-700 leading-relaxed italic">
                                                 "{lead.nivelMaturidadeSelecionado || 'Não informado'}"
                                                 <span className="mx-2 text-gray-300">|</span>
@@ -413,8 +452,8 @@ export const Listagem: React.FC = () => {
                                     <div className="mt-6 flex items-center justify-between">
                                         <div className="flex items-center gap-3">
                                             <div className="px-4 py-2 bg-brand-dark/5 rounded-2xl border border-brand-dark/10">
-                                                <span className="text-xs text-gray-500 block">Pontuação Total Final:</span>
-                                                <span className="text-xl font-bold text-brand-dark font-mono">{lead._score || 0}</span>
+                                                <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 block">Pontuação Total Final:</span>
+                                                <span className="text-xl font-bold text-brand-dark dark:text-gray-100 font-mono">{lead._score || 0}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -425,19 +464,19 @@ export const Listagem: React.FC = () => {
 
                     {/* Pagination for Grid View */}
                     <div className="flex items-center justify-between py-4">
-                        <span className="text-sm text-gray-500 backdrop-blur-md px-4 py-2 bg-white/40 rounded-full border border-white/50">
-                            Mostrando <span className="font-bold text-brand-dark">{table.getRowModel().rows.length}</span> resultados
+                        <span className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 backdrop-blur-md px-4 py-2 bg-white/40 rounded-full border border-white/50 dark:border-white/10">
+                            Mostrando <span className="font-bold text-brand-dark dark:text-gray-100">{table.getRowModel().rows.length}</span> resultados
                         </span>
                         <div className="flex gap-2">
                             <button
-                                className="px-6 py-2 bg-white/80 backdrop-blur-md border border-white/50 rounded-2xl text-sm hover:bg-brand-blue hover:text-white disabled:opacity-50 transition-all shadow-md"
+                                className="px-6 py-2 bg-white/80 dark:bg-[#1E293B]/80 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-2xl text-sm hover:bg-brand-blue hover:text-white disabled:opacity-50 transition-all shadow-md"
                                 onClick={() => table.previousPage()}
                                 disabled={!table.getCanPreviousPage()}
                             >
                                 Anterior
                             </button>
                             <button
-                                className="px-6 py-2 bg-white/80 backdrop-blur-md border border-white/50 rounded-2xl text-sm hover:bg-brand-blue hover:text-white disabled:opacity-50 transition-all shadow-md"
+                                className="px-6 py-2 bg-white/80 dark:bg-[#1E293B]/80 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-2xl text-sm hover:bg-brand-blue hover:text-white disabled:opacity-50 transition-all shadow-md"
                                 onClick={() => table.nextPage()}
                                 disabled={!table.getCanNextPage()}
                             >

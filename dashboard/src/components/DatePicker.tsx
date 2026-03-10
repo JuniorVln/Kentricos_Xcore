@@ -36,13 +36,13 @@ export const DatePicker: React.FC<DatePickerProps> = ({ dateRange, onChange, onC
         return (
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/20">
                 <button onClick={prevMonth} className="p-1 hover:bg-white/20 rounded-full transition-colors">
-                    <ChevronLeft size={20} className="text-gray-600" />
+                    <ChevronLeft size={20} className="text-gray-600 dark:text-gray-300" />
                 </button>
-                <span className="text-sm font-bold text-brand-dark capitalize">
+                <span className="text-sm font-bold text-brand-dark dark:text-white capitalize">
                     {format(currentMonth, 'MMMM yyyy', { locale: ptBR })}
                 </span>
                 <button onClick={nextMonth} className="p-1 hover:bg-white/20 rounded-full transition-colors">
-                    <ChevronRight size={20} className="text-gray-600" />
+                    <ChevronRight size={20} className="text-gray-600 dark:text-gray-300" />
                 </button>
             </div>
         );
@@ -55,7 +55,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({ dateRange, onChange, onC
 
         for (let i = 0; i < 7; i++) {
             days.push(
-                <div key={i} className="text-center text-[10px] font-bold text-gray-400 uppercase">
+                <div key={i} className="text-center text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase">
                     {format(addDays(startDate, i), dateFormat, { locale: ptBR })}
                 </div>
             );
@@ -89,7 +89,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({ dateRange, onChange, onC
                     key={normalizedDay.toString()}
                     className={`
                         relative h-10 flex items-center justify-center cursor-pointer text-sm transition-all rounded-lg
-                        ${!isCurrentMonth ? "text-gray-300 pointer-events-none opacity-20" : "text-gray-600 hover:bg-brand-cyan/20"}
+                        ${!isCurrentMonth ? "text-gray-300 pointer-events-none opacity-20" : "text-gray-600 dark:text-gray-300 hover:bg-brand-cyan/20"}
                         ${isSelected ? "bg-brand-cyan text-white font-bold shadow-lg z-10" : ""}
                         ${isInRange && !isSelected ? "bg-brand-cyan/10" : ""}
                     `}
@@ -113,10 +113,10 @@ export const DatePicker: React.FC<DatePickerProps> = ({ dateRange, onChange, onC
     };
 
     return (
-        <div className="absolute top-12 right-0 z-[100] w-72 bg-white/90 backdrop-blur-2xl border border-white/60 rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+        <div className="absolute top-12 right-0 z-[100] w-72 bg-white/90 dark:bg-[#1E293B]/90 backdrop-blur-2xl border border-white/60 rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
             <div className="flex justify-between items-center px-4 py-2 bg-brand-dark/5">
-                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Selecionar Período</span>
-                <button onClick={onClose} className="p-1 hover:bg-white rounded-full transition-colors text-gray-400 hover:text-red-500">
+                <span className="text-xs font-bold text-gray-500 dark:text-gray-400 dark:text-gray-500 uppercase tracking-wider">Selecionar Período</span>
+                <button onClick={onClose} className="p-1 hover:bg-white dark:bg-[#1E293B]rounded-full transition-colors text-gray-400 dark:text-gray-500 hover:text-red-500">
                     <X size={16} />
                 </button>
             </div>
@@ -127,7 +127,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({ dateRange, onChange, onC
             </div>
             {(dateRange.from || dateRange.to) && (
                 <div className="px-4 py-3 border-t border-white/20 bg-brand-dark/5 flex justify-between items-center">
-                    <div className="text-[10px] text-gray-500">
+                    <div className="text-[10px] text-gray-500 dark:text-gray-400 dark:text-gray-500">
                         {dateRange.from && format(dateRange.from, 'dd/MM/yy')}
                         {dateRange.to && ` - ${format(dateRange.to, 'dd/MM/yy')}`}
                     </div>

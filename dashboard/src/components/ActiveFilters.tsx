@@ -30,8 +30,8 @@ export const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 
     if (!hasActiveFilters && filteredCount === totalCount) return (
         <div className="flex items-center justify-between mb-6 px-2">
-            <span className="text-sm text-gray-500 bg-white/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/50">
-                Exibindo todos os <span className="font-bold text-brand-dark">{totalCount}</span> leads
+            <span className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 bg-white/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/50 dark:border-white/10">
+                Exibindo todos os <span className="font-bold text-brand-dark dark:text-white">{totalCount}</span> leads
             </span>
         </div>
     );
@@ -40,8 +40,8 @@ export const ActiveFilters: React.FC<ActiveFiltersProps> = ({
         <div className="flex flex-col gap-4 mb-6 px-2 animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500 bg-white/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/50 shadow-sm">
-                        Exibindo <span className="font-bold text-brand-dark">{filteredCount}</span> de <span className="font-bold text-brand-dark">{totalCount}</span> leads
+                    <span className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 bg-white/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/50 dark:border-white/10 shadow-sm">
+                        Exibindo <span className="font-bold text-brand-dark dark:text-white">{filteredCount}</span> de <span className="font-bold text-brand-dark dark:text-white">{totalCount}</span> leads
                     </span>
                     {hasActiveFilters && (
                         <button
@@ -92,8 +92,8 @@ export const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 
 const Chip: React.FC<{ label: string, value: string, onRemove: () => void, color?: 'cyan' | 'gray' }> = ({ label, value, onRemove, color = 'gray' }) => (
     <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium shadow-sm transition-all animate-in zoom-in duration-200 ${color === 'cyan'
-        ? 'bg-brand-cyan/10 border-brand-cyan/30 text-brand-dark'
-        : 'bg-white border-white/60 text-gray-600'
+        ? 'bg-brand-cyan/10 border-brand-cyan/30 text-brand-dark dark:text-white'
+        : 'bg-white dark:bg-[#1E293B]border-white/60 text-gray-600 dark:text-gray-300'
         }`}>
         <span className="opacity-60">{label}:</span>
         <span>{value}</span>

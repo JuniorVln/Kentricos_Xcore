@@ -45,11 +45,14 @@ export const Relatorios: React.FC = () => {
         const setorMap: Record<string, number> = {};
         const receitaMap: Record<string, number> = {};
         const nivelMap: Record<string, number> = {};
+        const nivelOrder = ['Inicial', 'Conscientização', 'Organizacional', 'Estruturação', 'Proatividade'];
 
         filteredLeads.forEach(d => {
             const s = d.setor || 'N/A';
             const r = d.receitaAnual || 'N/A';
-            const n = d.nivelMaturidadeSelecionado || 'N/A';
+            const rawN = d.nivelMaturidadeSelecionado || '';
+            const n = nivelOrder.find(l => rawN.includes(l)) || 'N/A';
+            
             setorMap[s] = (setorMap[s] || 0) + 1;
             receitaMap[r] = (receitaMap[r] || 0) + 1;
             nivelMap[n] = (nivelMap[n] || 0) + 1;
@@ -57,7 +60,6 @@ export const Relatorios: React.FC = () => {
 
         const COLORS = ['#184E77', '#1E6091', '#1A759F', '#168AAD', '#34A0A4', '#52B69A', '#76C893', '#99D98C', '#B5E48C', '#D9ED92'];
 
-        const nivelOrder = ['Inicial', 'Conscientização', 'Organizacional', 'Estruturação', 'Proatividade'];
 
         return {
             setor: Object.entries(setorMap).map(([name, value], i) => ({ name, value, color: COLORS[i % COLORS.length] })),

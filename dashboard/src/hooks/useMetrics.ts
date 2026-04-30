@@ -36,6 +36,7 @@ export function useMetrics(startDate?: Date | null, endDate?: Date | null) {
 
         // Distribuição de Nível
         const levels = ['Inicial', 'Conscientização', 'Organizacional', 'Estruturação', 'Proatividade'];
+        const nivelMap: Record<string, number> = {};
         filteredData.forEach(d => {
             const rawK = d.nivelMaturidadeSelecionado || 'N/A';
             const matchedK = levels.find(l => rawK.includes(l)) || rawK;

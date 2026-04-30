@@ -35,10 +35,11 @@ export function useMetrics(startDate?: Date | null, endDate?: Date | null) {
         const receitaChart = Object.entries(receitaMap).map(([name, value]) => ({ name, value }));
 
         // Distribuição de Nível
-        const nivelMap: Record<string, number> = {};
+        const levels = ['Inicial', 'Conscientização', 'Organizacional', 'Estruturação', 'Proatividade'];
         filteredData.forEach(d => {
-            const k = d.nivelMaturidadeSelecionado || 'N/A';
-            nivelMap[k] = (nivelMap[k] || 0) + 1;
+            const rawK = d.nivelMaturidadeSelecionado || 'N/A';
+            const matchedK = levels.find(l => rawK.includes(l)) || rawK;
+            nivelMap[matchedK] = (nivelMap[matchedK] || 0) + 1;
         });
 
         const nivelOrder = ['Inicial', 'Conscientização', 'Organizacional', 'Estruturação', 'Proatividade'];

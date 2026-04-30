@@ -201,7 +201,7 @@ export const Geral: React.FC = () => {
 
                     <div className="flex-1 w-full min-h-[220px]">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={metrics.nivelChart} margin={{ bottom: 20 }}>
+                            <BarChart data={metrics.nivelChart} margin={{ bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" opacity={0.5} />
                                 <XAxis 
                                     dataKey="name" 
@@ -210,9 +210,6 @@ export const Geral: React.FC = () => {
                                     axisLine={false} 
                                     tick={{ fill: '#6B7280' }} 
                                     interval={0}
-                                    angle={-25}
-                                    textAnchor="end"
-                                    height={50}
                                 />
                                 <Tooltip
                                     cursor={{ fill: '#F3F4F6', opacity: 0.4 }}

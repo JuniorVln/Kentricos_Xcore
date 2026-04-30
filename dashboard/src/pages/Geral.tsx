@@ -123,7 +123,7 @@ export const Geral: React.FC = () => {
             </div>
 
             {/* Main Bento Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-auto lg:h-[380px]">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
                 {/* Card 1: Highlight / Profile Style (Left - 3 cols) */}
                 <div className="lg:col-span-3 bg-gradient-to-b from-white/60 to-white/30 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden group h-full">

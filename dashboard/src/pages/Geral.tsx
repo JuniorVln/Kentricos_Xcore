@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMetrics } from '../hooks/useMetrics';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, LabelList } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { Calendar, Users, TrendingUp, Info } from 'lucide-react';
 import { DatePicker } from '../components/DatePicker';
 
@@ -199,35 +199,32 @@ export const Geral: React.FC = () => {
                         </button>
                     </div>
 
-                    <div className="flex-1 w-full min-h-[300px] mt-4">
+                    <div className="flex-1 w-full min-h-[240px] mt-4">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={metrics.nivelChart} margin={{ top: 20, bottom: 20, left: 10, right: 10 }}>
+                            <BarChart data={metrics.nivelChart} margin={{ top: 20, bottom: 70, left: 10, right: 10 }}>
                                 <XAxis 
                                     dataKey="name" 
-                                    hide={true}
+                                    interval={0}
+                                    angle={-90}
+                                    textAnchor="end"
+                                    height={100}
+                                    tick={{ fontSize: 10, fontWeight: 700, fill: '#64748b' }}
+                                    dy={10}
                                 />
-                                <YAxis hide={true} domain={[0, 'dataMax + 2']} />
                                 <Tooltip
                                     cursor={{ fill: '#F3F4F6', opacity: 0.4 }}
                                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', backgroundColor: 'rgba(255,255,255,0.9)' }}
                                 />
                                 <Bar 
                                     dataKey="value" 
-                                    radius={[8, 8, 0, 0]} 
-                                    barSize={60}
-                                    background={{ fill: '#F1F5F9', radius: 8 }}
+                                    fill="#184E77" 
+                                    radius={[6, 6, 0, 0]} 
+                                    barSize={65}
+                                    background={{ fill: '#F1F5F9', radius: 6 }}
                                 >
                                     {metrics.nivelChart.map((_entry, index) => (
                                         <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#184E77' : '#76E2F4'} />
                                     ))}
-                                    <LabelList 
-                                        dataKey="name" 
-                                        position="insideBottom" 
-                                        angle={-90} 
-                                        offset={20}
-                                        fill="#ffffff"
-                                        style={{ fontSize: '12px', fontWeight: 'bold', textShadow: '0px 0px 4px rgba(0,0,0,0.5)' }}
-                                    />
                                 </Bar>
                             </BarChart>
                         </ResponsiveContainer>

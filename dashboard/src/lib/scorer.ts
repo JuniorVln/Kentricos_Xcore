@@ -35,26 +35,41 @@ export function calculateScore(lead: Assessment): ScoredAssessment {
 
     // Extrair data de createdAt (Timestamp ou string), campo 'data', 'timestamp' ou dentro de personalData
     let data = '';
-    const rawDate = lead.createdAt || (lead as any).data || (lead as any).timestamp || pd.data || pd.createdAt;
+    const rawDate = lead.createdAt || (lead as any).created_at || (lead as any).created || (lead as any).data || (lead as any).timestamp || (lead as any).data_conclusao || (lead as any).date || (lead as any).ts || (lead as any).updatedAt || (lead as any).concluido_em || (lead as any).ts_criacao || pd.data || pd.createdAt || pd.created_at || pd.data_conclusao || pd.date || pd.timestamp;
 
     if (rawDate) {
-        let d: Date;
+        let d: Date | null = null;
         if (rawDate instanceof Date) {
             d = rawDate;
         } else if (typeof rawDate === 'object' && rawDate !== null && 'seconds' in rawDate) {
             // Handle Firestore Timestamp
             d = new Date((rawDate as any).seconds * 1000);
-        } else {
-            d = new Date(rawDate as any);
+        } else if (typeof rawDate === 'string') {
+            if (rawDate.includes('T')) {
+                d = new Date(rawDate);
+            } else if (rawDate.includes('/')) {
+                // Try parsing DD/MM/YYYY
+                const parts = rawDate.split('/');
+                if (parts.length === 3) {
+                    const day = parseInt(parts[0], 10);
+                    const month = parseInt(parts[1], 10) - 1;
+                    const year = parseInt(parts[2], 10);
+                    d = new Date(year, month, day);
+                }
+            } else if (!isNaN(Number(rawDate))) {
+                d = new Date(Number(rawDate));
+            }
+        } else if (typeof rawDate === 'number') {
+            d = new Date(rawDate);
         }
 
-        if (!isNaN(d.getTime())) {
+        if (d && !isNaN(d.getTime())) {
             data = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
         }
     }
 
     // 1. Cargo Score (40% weight) — usa personalData.role ou campo cargo se existir
-    const cargo = pd.role || pd.cargo || (lead as any).cargo || "";
+    const cargo = pd.role || pd.cargo || (lead as any).cargo || pd.job_title || "";
     let scoreCargo = 0;
     if (checkMatch(cargo, config.cargos_alto_potencial.hot)) {
         scoreCargo = 100;
@@ -80,13 +95,13 @@ export function calculateScore(lead: Assessment): ScoredAssessment {
         _score: Math.round(finalScore),
         _flag: flag,
         // Campos planos para os componentes de UI (extraídos de personalData)
-        nome: pd.fullName || pd.nome || (lead as any).nome || '',
-        empresa: pd.company || pd.empresa || (lead as any).empresa || '',
+        nome: pd.fullName || pd.nome || pd.name || (lead as any).nome || '',
+        empresa: pd.company || pd.empresa || pd.organization || (lead as any).empresa || '',
         email: pd.email || (lead as any).email || '',
-        celular: pd.whatsapp || pd.celular || (lead as any).celular || '',
-        setor: pd.sector || pd.setor || (lead as any).setor || '',
-        nivelMaturidadeSelecionado: pd.maturityLevel || pd.maturity_level || pd.nivelMaturidadeSelecionado || (lead as any).nivelMaturidadeSelecionado || '',
-        receitaAnual: pd.annualRevenue || pd.employeeQuantity || pd.receitaAnual || (lead as any).receitaAnual || '',
+        celular: pd.whatsapp || pd.celular || pd.phone || (lead as any).celular || '',
+        setor: pd.sector || pd.setor || pd.industry || (lead as any).setor || '',
+        nivelMaturidadeSelecionado: pd.maturityLevel || pd.maturity_level || pd.nivelMaturidadeSelecionado || pd.nivel_maturidade || (lead as any).nivelMaturidadeSelecionado || '',
+        receitaAnual: pd.annualRevenue || pd.employeeQuantity || pd.receitaAnual || pd.revenue || (lead as any).receitaAnual || '',
         pontuacaoTotalFinal: as_.totalScore ?? 0,
         data,
     };

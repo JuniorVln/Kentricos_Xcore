@@ -37,22 +37,19 @@ export function useMetrics(startDate?: Date | null, endDate?: Date | null) {
         // Distribuição de Nível
         const levels = ['Inicial', 'Conscientização', 'Organizacional', 'Estruturação', 'Proatividade'];
         const nivelMap: Record<string, number> = {};
+        
         filteredData.forEach(d => {
-            const rawK = d.nivelMaturidadeSelecionado || 'N/A';
-            const matchedK = levels.find(l => rawK.includes(l)) || rawK;
-            nivelMap[matchedK] = (nivelMap[matchedK] || 0) + 1;
+            const rawK = d.nivelMaturidadeSelecionado || '';
+            const matchedK = levels.find(l => rawK.includes(l));
+            if (matchedK) {
+                nivelMap[matchedK] = (nivelMap[matchedK] || 0) + 1;
+            }
         });
 
-        const nivelOrder = ['Inicial', 'Conscientização', 'Organizacional', 'Estruturação', 'Proatividade'];
-        const nivelChart = Object.entries(nivelMap).map(([name, value]) => ({ name, value }))
-            .sort((a, b) => {
-                const indexA = nivelOrder.indexOf(a.name);
-                const indexB = nivelOrder.indexOf(b.name);
-                if (indexA === -1 && indexB === -1) return a.name.localeCompare(b.name);
-                if (indexA === -1) return 1;
-                if (indexB === -1) return -1;
-                return indexA - indexB;
-            });
+        const nivelChart = levels.map(name => ({
+            name,
+            value: nivelMap[name] || 0
+        }));
 
         // Distribuição de Setor
         const setorMap: Record<string, number> = {};

@@ -102,13 +102,13 @@ export const Geral: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="bg-white/60 dark:bg-[#1E293B]/60 backdrop-blur-md border border-white/50 dark:border-white/10 px-6 py-3 rounded-2xl shadow-xl flex items-center gap-4 group hover:bg-white dark:bg-[#1E293B]transition-all cursor-default">
+                    <div className="bg-white/60 dark:bg-[#1E293B]/60 backdrop-blur-md border border-white/50 dark:border-white/10 px-6 py-3 rounded-2xl shadow-xl flex items-center gap-4 group hover:bg-white dark:hover:bg-[#1E293B] transition-all cursor-default">
                         <div className="p-2 bg-[#FCD34D]/10 text-brand-dark dark:text-gray-100 rounded-xl group-hover:scale-110 transition-transform">
                             <TrendingUp size={18} />
                         </div>
                         <div>
                             <div className="flex items-center gap-1.5">
-                                <span className="text-[10px] text-gray-500 dark:text-gray-300 dark:text-gray-500 uppercase tracking-widest font-bold">Score Médio</span>
+                                <span className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-widest font-bold">Score Médio</span>
                                 <div className="group/info relative z-50">
                                     <Info size={10} className="text-gray-400 dark:text-gray-500" />
                                     <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-56 p-2.5 bg-[#0A0A0A] text-white text-[10px] rounded-xl opacity-0 group-hover/info:opacity-100 transition-opacity pointer-events-none border border-slate-700 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] z-50">
@@ -199,10 +199,18 @@ export const Geral: React.FC = () => {
                         </button>
                     </div>
 
-                    <div className="flex-1 w-full min-h-[220px]">
+                    <div className="flex-1 w-full min-h-[240px] mt-4">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={metrics.nivelChart} margin={{ top: 20, bottom: 0, left: 0, right: 0 }}>
-                                <XAxis dataKey="name" hide />
+                            <BarChart data={metrics.nivelChart} margin={{ top: 20, bottom: 70, left: 10, right: 10 }}>
+                                <XAxis 
+                                    dataKey="name" 
+                                    interval={0}
+                                    angle={-90}
+                                    textAnchor="end"
+                                    height={100}
+                                    tick={{ fontSize: 10, fontWeight: 700, fill: '#64748b' }}
+                                    dy={10}
+                                />
                                 <Tooltip
                                     cursor={{ fill: '#F3F4F6', opacity: 0.4 }}
                                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', backgroundColor: 'rgba(255,255,255,0.9)' }}
@@ -210,17 +218,10 @@ export const Geral: React.FC = () => {
                                 <Bar 
                                     dataKey="value" 
                                     fill="#184E77" 
-                                    radius={[6, 6, 6, 6]} 
-                                    barSize={40}
+                                    radius={[6, 6, 0, 0]} 
+                                    barSize={65}
                                     background={{ fill: '#F1F5F9', radius: 6 }}
                                 >
-                                    <LabelList 
-                                        dataKey="name" 
-                                        position="center" 
-                                        angle={-90} 
-                                        fill="#FFFFFF" 
-                                        style={{ pointerEvents: 'none', fontWeight: 600, fontSize: '11px', textShadow: '0px 1px 2px rgba(0,0,0,0.2)' }}
-                                    />
                                     {metrics.nivelChart.map((_entry, index) => (
                                         <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#184E77' : '#76E2F4'} />
                                     ))}

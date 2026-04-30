@@ -201,16 +201,16 @@ export const Geral: React.FC = () => {
 
                     <div className="flex-1 w-full min-h-[260px] mt-2">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={metrics.nivelChart} margin={{ top: 10, bottom: 5, left: 0, right: 0 }} barCategoryGap="30%">
+                            <BarChart data={metrics.nivelChart} margin={{ top: 10, bottom: 80, left: 0, right: 0 }} barCategoryGap="30%">
                                 <XAxis 
                                     dataKey="name" 
                                     interval={0}
                                     angle={-90}
                                     textAnchor="end"
-                                    height={90}
+                                    height={85}
                                     tick={{ fontSize: 10, fontWeight: 700, fill: '#64748b' }}
-                                    dy={0}
-                                    tickMargin={0}
+                                    tickLine={false}
+                                    dy={5}
                                 />
                                 <Tooltip
                                     cursor={{ fill: '#F3F4F6', opacity: 0.4 }}

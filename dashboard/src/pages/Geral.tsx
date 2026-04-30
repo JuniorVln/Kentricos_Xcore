@@ -184,7 +184,7 @@ export const Geral: React.FC = () => {
 
                 {/* Card 3: Maturity Chart */}
                 <div className="lg:col-span-3 bg-white/60 dark:bg-[#1E293B]/60 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-3xl p-6 shadow-xl flex flex-col relative h-full">
-                    <div className="flex justify-between items-center mb-6">
+                    <div className="flex justify-between items-center mb-2">
                         <div>
                             <h3 className="text-xl font-bold text-brand-dark dark:text-gray-100">Nível de Maturidade</h3>
                             <div className="flex items-baseline gap-2">
@@ -199,31 +199,50 @@ export const Geral: React.FC = () => {
                         </button>
                     </div>
 
-                    <div className="flex-1 w-full min-h-[260px] mt-2">
+                    <div className="flex-1 w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={metrics.nivelChart} margin={{ top: 10, bottom: 80, left: 0, right: 0 }} barCategoryGap="30%">
+                            <BarChart 
+                                data={(metrics.nivelChart || []).map((d: { name: string; value: number }) => ({
+                                    ...d,
+                                    shortName: d.name === 'Conscientização' ? 'Consc.' 
+                                             : d.name === 'Organizacional' ? 'Organ.' 
+                                             : d.name === 'Estruturação' ? 'Estr.' 
+                                             : d.name === 'Proatividade' ? 'Proat.' 
+                                             : d.name
+                                }))} 
+                                margin={{ top: 8, bottom: 5, left: -10, right: 5 }} 
+                                barCategoryGap="25%"
+                            >
+                                <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#E2E8F0" />
                                 <XAxis 
-                                    dataKey="name" 
+                                    dataKey="shortName" 
                                     interval={0}
-                                    angle={-90}
-                                    textAnchor="end"
-                                    height={85}
                                     tick={{ fontSize: 10, fontWeight: 700, fill: '#64748b' }}
                                     tickLine={false}
-                                    dy={5}
+                                    axisLine={false}
+                                />
+                                <YAxis 
+                                    tick={{ fontSize: 9, fill: '#94A3B8' }}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    width={30}
                                 />
                                 <Tooltip
                                     cursor={{ fill: '#F3F4F6', opacity: 0.4 }}
                                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', backgroundColor: 'rgba(255,255,255,0.9)' }}
+                                    formatter={(value: number) => [value, 'Leads']}
+                                    labelFormatter={(label: string) => {
+                                        const map: Record<string, string> = { 'Consc.': 'Conscientização', 'Organ.': 'Organizacional', 'Estr.': 'Estruturação', 'Proat.': 'Proatividade' };
+                                        return map[label] || label;
+                                    }}
                                 />
                                 <Bar 
                                     dataKey="value" 
                                     fill="#184E77" 
                                     radius={[6, 6, 0, 0]} 
-                                    maxBarSize={40}
-                                    background={{ fill: '#F1F5F9', radius: 6 }}
+                                    maxBarSize={36}
                                 >
-                                    {metrics.nivelChart.map((_entry, index) => (
+                                    {(metrics.nivelChart || []).map((_entry: unknown, index: number) => (
                                         <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#184E77' : '#76E2F4'} />
                                     ))}
                                 </Bar>

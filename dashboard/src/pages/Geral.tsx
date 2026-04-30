@@ -238,7 +238,7 @@ export const Geral: React.FC = () => {
                         <div className="relative">
                             <button
                                 onClick={() => setShowDatePicker(!showDatePicker)}
-                                className={`p-2 rounded-full shadow-sm transition-all cursor-pointer border ${showDatePicker ? 'bg-brand-blue text-white border-brand-blue' : 'bg-white dark:bg-[#1E293B]text-gray-400 dark:text-gray-500 hover:bg-gray-50 border-transparent hover:border-brand-blue/20'}`}
+                                className={`p-2 rounded-full shadow-sm transition-all cursor-pointer border ${showDatePicker ? 'bg-brand-blue text-white border-brand-blue' : 'bg-white dark:bg-[#1E293B] text-gray-400 dark:text-gray-500 hover:bg-gray-50 border-transparent hover:border-brand-blue/20'}`}
                                 title="Filtrar por data"
                             >
                                 <Calendar size={16} />

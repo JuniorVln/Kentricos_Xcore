@@ -10,7 +10,14 @@
       "Bash(npx skills add alexwelcing/copy@paid-ads -g -y)",
       "Bash(npx skills add willem4130/claude-code-skills@elite-powerpoint-designer -g -y)",
       "Bash(npx skills add dylantarre/animation-principles@brand-marketing -g -y)",
-      "Bash(npx skills add blitzreels/agent-skills@blitzreels-motion-graphics -g -y)"
+      "Bash(npx skills add blitzreels/agent-skills@blitzreels-motion-graphics -g -y)",
+      "Read(//c/Users/junio/.claude/**)",
+      "Read(//c/Users/junio/AppData/Roaming/Claude/**)",
+      "Bash(node -e \":*)",
+      "Bash(python -m json.tool)",
+      "Bash(python -c \":*)",
+      "Bash(firecrawl search:*)",
+      "Bash(npx skills:*)"
     ]
   }
 }

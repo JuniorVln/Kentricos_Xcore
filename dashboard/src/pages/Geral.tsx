@@ -32,7 +32,8 @@ export const Geral: React.FC = () => {
     const matrixData = React.useMemo(() => {
         const matrix: number[][] = MATURITY_LEVELS.map(() => MATURITY_LEVELS.map(() => 0));
         (metrics?.expectationChart ?? []).forEach(d => {
-            const ri = MATURITY_LEVELS.indexOf(d.autoLevel || '');
+            const auto = (d.autoLevel || '').toLowerCase();
+            const ri = MATURITY_LEVELS.findIndex(level => auto.includes(level.toLowerCase()));
             const ci = MATURITY_LEVELS.indexOf(getMaturityFromScore(d.score || 0));
             if (ri >= 0 && ci >= 0) matrix[ri][ci]++;
         });
@@ -198,11 +199,21 @@ export const Geral: React.FC = () => {
                         </button>
                     </div>
 
-                    <div className="flex-1 w-full min-h-[200px]">
+                    <div className="flex-1 w-full min-h-[220px]">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={metrics.nivelChart}>
+                            <BarChart data={metrics.nivelChart} margin={{ bottom: 20 }}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" opacity={0.5} />
-                                <XAxis dataKey="name" fontSize={10} tickLine={false} axisLine={false} tick={{ fill: '#6B7280' }} interval={0} />
+                                <XAxis 
+                                    dataKey="name" 
+                                    fontSize={10} 
+                                    tickLine={false} 
+                                    axisLine={false} 
+                                    tick={{ fill: '#6B7280' }} 
+                                    interval={0}
+                                    angle={-25}
+                                    textAnchor="end"
+                                    height={50}
+                                />
                                 <Tooltip
                                     cursor={{ fill: '#F3F4F6', opacity: 0.4 }}
                                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', backgroundColor: 'rgba(255,255,255,0.9)' }}

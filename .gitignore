@@ -34,3 +34,4 @@ dashboard/.env.production
 # ─── Sistema ──────────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
+.vercel

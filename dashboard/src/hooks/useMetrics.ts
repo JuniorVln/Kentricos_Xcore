@@ -79,7 +79,7 @@ export function useMetrics(startDate?: Date | null, endDate?: Date | null) {
             autoLevel: d.nivelMaturidadeSelecionado || 'N/A',
             score: d.pontuacaoTotalFinal || 0,
             revenue: d.receitaAnual
-        })).slice(0, 50); // Limit points for visibility
+        })).filter(d => d.autoLevel && d.autoLevel !== 'N/A');
 
         // Leads Quentes vs Frios
         const hot = filteredData.filter(d => d._flag === 'HOT').length;

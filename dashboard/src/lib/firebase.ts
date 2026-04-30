@@ -13,26 +13,37 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-// Types
+// Types — espelha o schema real do Firestore (coleção: results)
+export interface PersonalData {
+    fullName?: string;
+    email?: string;
+    whatsapp?: string;
+    company?: string;
+    sector?: string;
+    maturityLevel?: string;
+    employeeQuantity?: string;
+    receiveContent?: boolean;
+    privacyPolicy?: boolean;
+    [key: string]: any;
+}
+
+export interface AssessmentScore {
+    totalScore: number;
+    scoresByPillar: Record<string, number>;
+}
+
 export interface Assessment {
     id: string;
-    nome?: string;
-    data?: string; // dd/mm/yyyy
-    empresa?: string;
-    email?: string;
-    celular?: string;
-    receitaAnual?: string;
-    setor?: string;
-    nivelMaturidadeSelecionado?: string;
-    pontuacaoTotalFinal?: number;
-    [key: string]: any;
+    createdAt?: Date;
+    personalData: PersonalData;
+    assessmentScore: AssessmentScore;
 }
 
 // Data Access Layer (Global)
 export const api = {
     async getAllAssessments(limitCount = 50, lastDoc?: QueryDocumentSnapshot) {
         try {
-            const colRef = collection(db, 'resultado');
+            const colRef = collection(db, 'results'); // nome real da coleção no Firestore
             let q = query(colRef, limit(limitCount));
 
             // If we had a timestamp, we would order by it. Assuming 'data' string is not sortable easily.

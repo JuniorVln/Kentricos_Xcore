@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+import { api } from '../lib/firebase';
 import { processLeads, type ScoredAssessment } from '../lib/scorer';
 
 // Simple in-memory cache to avoid refetching on tab switch
@@ -17,13 +17,10 @@ export function useLeadsData() {
             try {
                 setLoading(true);
 
-                // MODO MOCK ATIVADO (Para visualizar dados reais do print)
-                // const res = await api.getAllAssessments(1000);
-                // if (res.error) throw res.error;
-                // const list = res.data;
-
-                const { MOCK_LEADS } = await import('../data/mock_leads');
-                const list = MOCK_LEADS;
+                // FIREBASE REAL — busca todos os assessments da coleção 'results'
+                const res = await api.getAllAssessments(1000);
+                if (res.error) throw res.error;
+                const list = res.data;
 
                 const processed = processLeads(list);
                 cachedData = processed;

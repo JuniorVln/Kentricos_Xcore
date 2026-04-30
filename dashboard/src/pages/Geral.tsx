@@ -201,22 +201,24 @@ export const Geral: React.FC = () => {
 
                     <div className="flex-1 w-full min-h-[220px]">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart layout="vertical" data={metrics.nivelChart} margin={{ left: 10, right: 30, top: 10, bottom: 10 }}>
-                                <XAxis type="number" hide />
-                                <YAxis 
+                            <BarChart data={metrics.nivelChart} margin={{ bottom: 60 }}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" opacity={0.5} />
+                                <XAxis 
                                     dataKey="name" 
-                                    type="category"
                                     fontSize={10} 
                                     tickLine={false} 
                                     axisLine={false} 
                                     tick={{ fill: '#6B7280', fontWeight: 500 }} 
-                                    width={90}
+                                    interval={0}
+                                    angle={-90}
+                                    textAnchor="end"
+                                    height={60}
                                 />
                                 <Tooltip
                                     cursor={{ fill: '#F3F4F6', opacity: 0.4 }}
                                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', backgroundColor: 'rgba(255,255,255,0.9)' }}
                                 />
-                                <Bar dataKey="value" fill="#184E77" radius={[0, 4, 4, 0]} barSize={16}>
+                                <Bar dataKey="value" fill="#184E77" radius={[4, 4, 0, 0]} barSize={32}>
                                     {metrics.nivelChart.map((_entry, index) => (
                                         <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#184E77' : '#76E2F4'} />
                                     ))}

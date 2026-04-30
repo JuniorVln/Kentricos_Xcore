@@ -33,10 +33,21 @@ export function calculateScore(lead: Assessment): ScoredAssessment {
     const pd = lead.personalData || {};
     const as_ = lead.assessmentScore || { totalScore: 0, scoresByPillar: {} };
 
-    // Extrair data de createdAt (Timestamp ou string)
+    // Extrair data de createdAt (Timestamp ou string), campo 'data', 'timestamp' ou dentro de personalData
     let data = '';
-    if (lead.createdAt) {
-        const d = lead.createdAt instanceof Date ? lead.createdAt : new Date(lead.createdAt as any);
+    const rawDate = lead.createdAt || (lead as any).data || (lead as any).timestamp || pd.data || pd.createdAt;
+
+    if (rawDate) {
+        let d: Date;
+        if (rawDate instanceof Date) {
+            d = rawDate;
+        } else if (typeof rawDate === 'object' && rawDate !== null && 'seconds' in rawDate) {
+            // Handle Firestore Timestamp
+            d = new Date((rawDate as any).seconds * 1000);
+        } else {
+            d = new Date(rawDate as any);
+        }
+
         if (!isNaN(d.getTime())) {
             data = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
         }
